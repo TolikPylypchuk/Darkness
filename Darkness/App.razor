@@ -2,7 +2,13 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<p>Hello world!</p>
+<div class="d-flex flex-column" style="min-height: 100vh">
+    <main class="flex-grow-1">
+        <MudText class="ma-4">Hello world!</MudText>
+    </main>
+
+    <Footer />
+</div>
 
 @code {
     private MudTheme DarkTheme { get; } = new()

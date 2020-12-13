@@ -1,0 +1,30 @@
+<MudDivider />
+
+<footer class="pa-4">
+    <div class="d-flex flex-row justify-md-space-between">
+        <div class="flex-md-column align-self-md-center">
+            <MudText>
+                Powered by <MudLink Href="https://blazor.net" Target="_blank">Blazor</MudLink> and
+                <MudLink Href="https://pages.github.com" Target="_blank">Github Pages</MudLink>.
+                Favicon made by
+                <MudLink Href="https://www.flaticon.com/free-icon/board-game_3616299?related_item_id=3616299&term=maze">
+                    DinosoftLabs
+                </MudLink>
+                from <MudLink Href="https://www.flaticon.com">www.flaticon.com</MudLink>.
+            </MudText>
+        </div>
+        <MudText class="flex-md-column align-self-md-center">
+            &copy; @this.CopyrightYears Anatoliy Pylypchuk
+        </MudText>
+    </div>
+</footer>
+
+@code {
+    private readonly int CopyrightStart = 2020;
+    private readonly int CurrentYear = DateTime.UtcNow.Year;
+
+    private string CopyrightYears =>
+        this.CopyrightStart == this.CurrentYear
+            ? this.CurrentYear.ToString()
+            : $"{this.CopyrightStart}-{this.CurrentYear}";
+}
