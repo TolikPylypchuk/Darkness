@@ -13,8 +13,11 @@
 
     <base href="/" />
 
+    <link href="lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="lib/typeface-roboto/index.css" rel="stylesheet" />
+
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+
     <link href="css/app.css" rel="stylesheet" />
     <link href="Darkness.styles.css" rel="stylesheet" />
 
@@ -37,13 +40,23 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="d-flex justify-center align-center h-100">
+            <span class="cogs" aria-label="loading">
+                <i class="fas fa-cog fa-4x fa-spin" data-fa-transform="down-5 right-5"></i>
+                <i class="fas fa-cog fa-3x fa-spin" data-fa-transform="down-17 right-3"></i>
+                <i class="fas fa-cog fa-5x fa-spin" data-fa-transform="left-7"></i>
+            </span>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
+    <script src="lib/font-awesome/js/all.min.js"></script>
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>

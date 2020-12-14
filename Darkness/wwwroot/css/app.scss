@@ -1,3 +1,12 @@
+body {
+    background-color: #32333d;
+    color: rgba(255,255,255, 0.70);
+}
+
+.h-100 {
+    min-height: 100vh;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

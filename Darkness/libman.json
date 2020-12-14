@@ -6,6 +6,10 @@
       "provider": "unpkg",
       "library": "typeface-roboto@1.1.13",
       "destination": "wwwroot/lib/typeface-roboto/"
+    },
+    {
+      "library": "font-awesome@5.15.1",
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }
