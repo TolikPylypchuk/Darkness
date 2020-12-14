@@ -1,0 +1,27 @@
+@inject ISnackbar Snackbar
+
+<div class="d-flex flex-column justify-center align-center">
+    <MudText Typo="Typo.h1" Class="ma-4">Darkness</MudText>
+
+    <MudText Class="ma-2">A maze game where you don't actually see the entire maze</MudText>
+
+    <div class="d-flex justify-between align-content-stretch">
+        <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
+                   Color="Color.Primary" @onclick="this.Play">
+            Play
+        </MudButton>
+
+        <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
+                    @onclick="this.OpenSettings">
+            Settings
+        </MudButton>
+    </div>
+</div>
+
+@code {
+    private void Play() =>
+        this.Snackbar.Add("Playing is not implemented yet", Severity.Error);
+
+    private void OpenSettings() =>
+        this.Snackbar.Add("Settings are not implemented yet", Severity.Error);
+} 

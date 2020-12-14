@@ -18,8 +18,15 @@ namespace Darkness
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddMudBlazorDialog();
-            builder.Services.AddMudBlazorSnackbar();
             builder.Services.AddMudBlazorResizeListener();
+            builder.Services.AddMudBlazorSnackbar(config =>
+            {
+                config.PositionClass = Defaults.Classes.Position.BottomCenter;
+
+                config.VisibleStateDuration = 10000;
+                config.HideTransitionDuration = 500;
+                config.ShowTransitionDuration = 500;
+            });
 
             await builder.Build().RunAsync();
         }
