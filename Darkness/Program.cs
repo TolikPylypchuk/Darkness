@@ -1,6 +1,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using Darkness.Maze;
+using Darkness.Settings;
+
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,17 +19,20 @@ namespace Darkness
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddMudBlazorDialog();
-            builder.Services.AddMudBlazorResizeListener();
-            builder.Services.AddMudBlazorSnackbar(config =>
-            {
-                config.PositionClass = Defaults.Classes.Position.BottomCenter;
+            builder.Services
+                .AddScoped(sp => new HttpClient { BaseAddress = new(builder.HostEnvironment.BaseAddress) })
+                .AddSingleton<IMazeGenerator, MazeGenerator>()
+                .AddSingleton<ISettingsService, InMemorySettingsService>()
+                .AddMudBlazorDialog()
+                .AddMudBlazorResizeListener()
+                .AddMudBlazorSnackbar(config =>
+                {
+                    config.PositionClass = Defaults.Classes.Position.BottomCenter;
 
-                config.VisibleStateDuration = 10000;
-                config.HideTransitionDuration = 500;
-                config.ShowTransitionDuration = 500;
-            });
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                });
 
             await builder.Build().RunAsync();
         }
