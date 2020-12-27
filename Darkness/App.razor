@@ -2,31 +2,32 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="d-flex flex-column vh-100">
-    <main class="flex-grow-1 d-flex justify-center align-center">
-        <MainMenu />
-    </main>
-
-    <Footer />
-</div>
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <p>Sorry, there's nothing at this address.</p>
+    </NotFound>
+</Router>
 
 @code {
     private MudTheme DarkTheme { get; } = new()
     {
         Palette = new()
         {
-            Black = "#27272f",
-            Background = "#32333d",
-            BackgroundGrey = "#27272f",
+            Black = "#27272F",
+            Background = "#32333D",
+            BackgroundGrey = "#27272F",
             Surface = "#373740",
-            DrawerBackground = "#27272f",
+            DrawerBackground = "#27272F",
             DrawerText = "rgba(255,255,255, 0.50)",
             DrawerIcon = "rgba(255,255,255, 0.50)",
-            AppbarBackground = "#27272f",
+            AppbarBackground = "#27272F",
             AppbarText = "rgba(255,255,255, 0.70)",
             TextPrimary = "rgba(255,255,255, 0.70)",
             TextSecondary = "rgba(255,255,255, 0.50)",
-            ActionDefault = "#adadb1",
+            ActionDefault = "#ADADB1",
             ActionDisabled = "rgba(255,255,255, 0.26)",
             ActionDisabledBackground = "rgba(255,255,255, 0.12)"
         }

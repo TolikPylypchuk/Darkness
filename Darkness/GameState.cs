@@ -1,9 +1,7 @@
 using Darkness.Maze;
+using Darkness.Settings;
 
 namespace Darkness
 {
-    public sealed class GameState
-    {
-        public GameMaze Maze { get; }
-    }
+    public sealed record GameState(GameMaze Maze, GameSettings Settings);
 }

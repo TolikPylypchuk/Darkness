@@ -1,9 +1,11 @@
+using System.Threading.Tasks;
+
 namespace Darkness.Settings
 {
     public interface ISettingsService
     {
-        public GameSettings GetSettings();
-        public void SaveSettings(GameSettings settings);
-        public void ClearSettigns(GameSettings settings);
+        public ValueTask<GameSettings> GetSettings();
+        public ValueTask SaveSettings(GameSettings settings);
+        public ValueTask ClearSettigns();
     }
 }
