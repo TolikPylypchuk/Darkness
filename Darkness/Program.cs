@@ -1,8 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Blazored.LocalStorage;
-
+using Darkness.History;
 using Darkness.Maze;
 using Darkness.Settings;
 
@@ -25,7 +24,7 @@ namespace Darkness
                 .AddScoped(sp => new HttpClient { BaseAddress = new(builder.HostEnvironment.BaseAddress) })
                 .AddScoped<IMazeGenerator, MazeGenerator>()
                 .AddScoped<ISettingsService, LocalStorageSettingsService>()
-                .AddBlazoredLocalStorage()
+                .AddScoped(typeof(IHistoryService<>), typeof(BrowserHistoryService<>))
                 .AddMudBlazorDialog()
                 .AddMudBlazorResizeListener()
                 .AddMudBlazorSnackbar(config =>

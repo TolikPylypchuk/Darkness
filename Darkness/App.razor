@@ -1,17 +1,84 @@
+@inject IHistoryService<Page> History
+
 <MudThemeProvider Theme="this.DarkTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <p>Sorry, there's nothing at this address.</p>
-    </NotFound>
-</Router>
+<div class="d-flex flex-column vh-100">
+    <main class="flex-grow-1 d-flex justify-center align-center">
+        @switch (this.CurrentPage)
+        {
+            case Page.MainMenu:
+                <MainMenu OnPlayCallback="this.OpenMazeCanvas" OnSettingsCallback="this.OpenSettings" />
+                break;
+            case Page.MazeCanvas:
+                <MazeCanvas OnBackToMainMenuCallback="this.OpenMainMenu" />
+                break;
+            case Page.SettingsForm:
+                <SettingsForm OnBackToMainMenuCallback="this.OpenMainMenu" />
+                break;
+        }
+    </main>
+
+    @if (this.ShowFooter)
+    {
+        <Footer />
+    }
+</div>
 
 @code {
+    public enum Page
+    {
+        MainMenu,
+        MazeCanvas,
+        SettingsForm
+    }
+
+    private Page CurrentPage { get; set; } = Page.MainMenu;
+
+    private string CurrentPageTitle =>
+        this.CurrentPage switch
+        {
+            Page.MainMenu => "Darkness",
+            Page.MazeCanvas => "Maze | Darkness",
+            Page.SettingsForm => "Settings | Darkness",
+            _ => String.Empty
+        };
+
+    private bool ShowFooter => this.CurrentPage != Page.MazeCanvas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await this.History.OnPop(page =>
+        {
+            this.CurrentPage = page;
+            this.StateHasChanged();
+            return ValueTask.CompletedTask;
+        });
+    }
+
+    private async Task OpenMainMenu()
+    {
+        this.CurrentPage = Page.MainMenu;
+        await this.SaveCurrentPage();
+    }
+
+    private async Task OpenMazeCanvas()
+    {
+        this.CurrentPage = Page.MazeCanvas;
+        await this.SaveCurrentPage();
+    }
+
+    private async Task OpenSettings()
+    {
+        this.CurrentPage = Page.SettingsForm;
+        await this.SaveCurrentPage();
+    }
+
+    private ValueTask SaveCurrentPage() =>
+        this.History.Push(this.CurrentPage, this.CurrentPageTitle);
+
     private MudTheme DarkTheme { get; } = new()
     {
         Palette = new()

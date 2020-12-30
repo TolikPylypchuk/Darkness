@@ -1,7 +1,10 @@
 using System;
 using System.Threading.Tasks;
 
-using Blazored.LocalStorage;
+using BrowserInterop.Extensions;
+using BrowserInterop.Storage;
+
+using Microsoft.JSInterop;
 
 namespace Darkness.Settings
 {
@@ -9,28 +12,43 @@ namespace Darkness.Settings
     {
         private const string SettingsKey = "settings";
 
-        private readonly ILocalStorageService localStorage;
+        private readonly IJSRuntime jsRuntime;
 
-        public LocalStorageSettingsService(ILocalStorageService localStorage) =>
-            this.localStorage = localStorage ?? throw new ArgumentNullException(nameof(localStorage));
+        public LocalStorageSettingsService(IJSRuntime javaScript) =>
+            this.jsRuntime = javaScript ?? throw new ArgumentNullException(nameof(javaScript));
 
         public override async ValueTask<GameSettings> GetSettings()
         {
-            if (await this.localStorage.ContainKeyAsync(SettingsKey))
+            var localStorage = await this.GetLocalStorage();
+
+            var settings = await localStorage.GetItem<GameSettings>(SettingsKey);
+            if (settings != null)
             {
-                return await this.localStorage.GetItemAsync<GameSettings>(SettingsKey);
+                return settings;
             }
 
-            var settings = this.GetDefaultSettings();
-            await this.localStorage.SetItemAsync(SettingsKey, settings);
+            var defaultSettings = this.GetDefaultSettings();
+            await localStorage.SetItem(SettingsKey, defaultSettings);
 
-            return settings;
+            return defaultSettings;
         }
 
-        public override ValueTask SaveSettings(GameSettings settings) =>
-            this.localStorage.SetItemAsync(SettingsKey, settings ?? throw new ArgumentNullException(nameof(settings)));
+        public override async ValueTask SaveSettings(GameSettings settings)
+        {
+            var localStorage = await this.GetLocalStorage();
+            await localStorage.SetItem(SettingsKey, settings ?? throw new ArgumentNullException(nameof(settings)));
+        }
 
-        public override ValueTask ClearSettigns() =>
-            this.localStorage.SetItemAsync(SettingsKey, this.GetDefaultSettings());
+        public override async ValueTask ClearSettigns()
+        {
+            var localStorage = await this.GetLocalStorage();
+            await localStorage.SetItem(SettingsKey, this.GetDefaultSettings());
+        }
+
+        private async ValueTask<WindowStorage> GetLocalStorage()
+        {
+            var window = await this.jsRuntime.Window();
+            return window.LocalStorage;
+        }
     }
 }

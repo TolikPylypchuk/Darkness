@@ -1,6 +1,3 @@
-@page "/" 
-@inject ISnackbar Snackbar
-
 <div class="d-flex flex-column justify-center align-center">
     <MudText Typo="Typo.h1" Class="ma-4">Darkness</MudText>
 
@@ -8,18 +5,21 @@
 
     <div class="d-flex justify-between align-content-stretch">
         <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   Color="Color.Primary" @onclick="this.Play">
+                   Color="Color.Primary" @onclick="this.OnPlayCallback">
             Play
         </MudButton>
 
         <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   Link="/settings">
+                   @onclick="this.OnSettingsCallback">
             Settings
         </MudButton>
     </div>
 </div>
 
 @code {
-    private void Play() =>
-        this.Snackbar.Add("Playing is not implemented yet", Severity.Error);
-} 
+    [Parameter]
+    public EventCallback OnPlayCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnSettingsCallback { get; set; }
+}
