@@ -14,35 +14,29 @@ namespace Darkness.Settings
 
         private readonly IJSRuntime jsRuntime;
 
-        public LocalStorageSettingsService(IJSRuntime javaScript) =>
-            this.jsRuntime = javaScript ?? throw new ArgumentNullException(nameof(javaScript));
+        public LocalStorageSettingsService(IJSRuntime jsRuntime) =>
+            this.jsRuntime = jsRuntime ?? throw new ArgumentNullException(nameof(jsRuntime));
 
         public override async ValueTask<GameSettings> GetSettings()
         {
             var localStorage = await this.GetLocalStorage();
 
-            var settings = await localStorage.GetItem<GameSettings>(SettingsKey);
-            if (settings != null)
+            try
             {
-                return settings;
+                return await localStorage.GetItem<GameSettings>(SettingsKey);
+            } catch
+            {
+                var defaultSettings = await this.GetDefaultSettings();
+                await localStorage.SetItem(SettingsKey, defaultSettings);
+
+                return defaultSettings;
             }
-
-            var defaultSettings = this.GetDefaultSettings();
-            await localStorage.SetItem(SettingsKey, defaultSettings);
-
-            return defaultSettings;
         }
 
         public override async ValueTask SaveSettings(GameSettings settings)
         {
             var localStorage = await this.GetLocalStorage();
             await localStorage.SetItem(SettingsKey, settings ?? throw new ArgumentNullException(nameof(settings)));
-        }
-
-        public override async ValueTask ClearSettigns()
-        {
-            var localStorage = await this.GetLocalStorage();
-            await localStorage.SetItem(SettingsKey, this.GetDefaultSettings());
         }
 
         private async ValueTask<WindowStorage> GetLocalStorage()

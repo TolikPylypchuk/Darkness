@@ -3,12 +3,79 @@
 <div class="d-flex flex-column justify-center align-center">
     <MudText Typo="Typo.h2" Class="ma-4">Settings</MudText>
 
-    <MudText class="d-flex justify-between align-content-stretch">
-        Still working on it.
-    </MudText>
+    <MudForm>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="int" Label="Maze Width" Strict="true" @bind-Value="this.MazeWidth" Class="ma-2">
+                    <MudSelectItem T="int" Value="25" />
+                    <MudSelectItem T="int" Value="50" />
+                    <MudSelectItem T="int" Value="75" />
+                    <MudSelectItem T="int" Value="100" />
+                    <MudSelectItem T="int" Value="150" />
+                    <MudSelectItem T="int" Value="200" />
+                    <MudSelectItem T="int" Value="250" />
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="int" Label="Maze Height" Strict="true" @bind-Value="this.MazeHeight" Class="ma-2">
+                    <MudSelectItem T="int" Value="25" />
+                    <MudSelectItem T="int" Value="50" />
+                    <MudSelectItem T="int" Value="75" />
+                    <MudSelectItem T="int" Value="100" />
+                    <MudSelectItem T="int" Value="125" />
+                    <MudSelectItem T="int" Value="150" />
+                    <MudSelectItem T="int" Value="200" />
+                    <MudSelectItem T="int" Value="250" />
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+
+    <div class="d-flex flex-row justify-space-between w-100">
+        <div class="d-flex flex-row">
+            <MudButton Class="my-4" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+                       @onclick="this.Save">
+                Save
+            </MudButton>
+            <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" @onclick="this.Cancel">
+                Cancel
+            </MudButton>
+        </div>
+        
+        <MudButton Class="my-4" Variant="Variant.Filled" DisableElevation="true" @onclick="this.Reset">
+            Reset
+        </MudButton>
+    </div>
 </div>
 
 @code {
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
+
+    private int MazeWidth { get; set; }
+    private int MazeHeight { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        this.InitializeFields(await this.SettingsService.GetSettings());
+    }
+
+    private async Task Save()
+    {
+        await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight));
+        await this.OnBackToMainMenuCallback.InvokeAsync();
+    }
+
+    private async Task Cancel() =>
+        await this.OnBackToMainMenuCallback.InvokeAsync();
+
+    private async Task Reset() =>
+        this.InitializeFields(await this.SettingsService.GetDefaultSettings());
+
+    private void InitializeFields(GameSettings settings)
+    {
+        this.MazeWidth = settings.MazeWidth;
+        this.MazeHeight = settings.MazeHeight;
+    }
 }
