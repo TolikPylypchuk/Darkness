@@ -1,3 +1,6 @@
+@inject ISettingsService SettingsService
+@inject IMazeGenerator MazeGenerator
+
 <div class="d-flex flex-column justify-center align-center">
     <MudText class="d-flex justify-between align-content-stretch">
         Still working on it.
@@ -7,4 +10,11 @@
 @code {
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var settings = await this.SettingsService.GetSettings();
+    }
 }

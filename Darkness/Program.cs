@@ -22,7 +22,7 @@ namespace Darkness
 
             builder.Services
                 .AddScoped(sp => new HttpClient { BaseAddress = new(builder.HostEnvironment.BaseAddress) })
-                .AddScoped<IMazeGenerator, MazeGenerator>()
+                .AddScoped<IMazeGenerator, KruskalMazeGenerator>()
                 .AddScoped<ISettingsService, LocalStorageSettingsService>()
                 .AddScoped(typeof(IHistoryService<>), typeof(BrowserHistoryService<>))
                 .AddMudBlazorDialog()
