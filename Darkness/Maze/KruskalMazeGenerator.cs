@@ -7,27 +7,33 @@ namespace Darkness.Maze
 {
     public sealed class KruskalMazeGenerator : IMazeGenerator
     {
-        private sealed record Edge(int FirstRow, int FirstColumn, int SecondRow, int SecondColumn);
+        private sealed record Edge(Location FirstLocation, Location SecondLocation);
 
         public GameMaze CreateMaze(GameSettings settings)
         {
+            var random = new Random();
+
             var (cells, sets) = this.InitializeCells(settings);
-            var edges = this.CreateEdges(cells.GetLength(0), cells.GetLength(1));
+
+            int numRows = cells.GetLength(0);
+            int numCols = cells.GetLength(1);
+
+            var edges = this.CreateEdges(numRows, numCols, random);
 
             while (edges.TryDequeue(out var edge))
             {
-                var firstSet = sets[edge.FirstRow, edge.FirstColumn];
-                var secondSet = sets[edge.SecondRow, edge.SecondColumn];
+                var firstSet = sets.Get(edge.FirstLocation);
+                var secondSet = sets.Get(edge.SecondLocation);
 
                 if (!ReferenceEquals(firstSet, secondSet))
                 {
-                    var firstCell = cells[edge.FirstRow, edge.FirstColumn];
-                    var secondCell = cells[edge.SecondRow, edge.SecondColumn];
+                    var firstCell = cells.Get(edge.FirstLocation);
+                    var secondCell = cells.Get(edge.SecondLocation);
 
                     var (newFirstCell, newSecondCell) = this.ConnectCells(firstCell, secondCell);
 
-                    cells[edge.FirstRow, edge.FirstColumn] = newFirstCell;
-                    cells[edge.SecondRow, edge.SecondColumn] = newSecondCell;
+                    cells.Set(edge.FirstLocation, newFirstCell);
+                    cells.Set(edge.SecondLocation, newSecondCell);
 
                     firstSet.Remove(firstCell);
                     secondSet.Remove(secondCell);
@@ -39,9 +45,6 @@ namespace Darkness.Maze
                     {
                         firstSet.Add(cell);
                     }
-
-                    int numRows = sets.GetLength(0);
-                    int numCols = sets.GetLength(1);
 
                     for (int row = 0; row < numRows; row++)
                     {
@@ -56,7 +59,10 @@ namespace Darkness.Maze
                 }
             }
 
-            return new(cells);
+            var start = cells[random.Next(numRows), 0];
+            var end = cells[random.Next(numRows), numCols - 1];
+
+            return new(cells, start, end);
         }
 
         private (Cell[,], HashSet<Cell>[,]) InitializeCells(GameSettings settings)
@@ -68,7 +74,7 @@ namespace Darkness.Maze
             {
                 for (int col = 0; col < settings.MazeWidth; col++)
                 {
-                    var cell = Cell.Closed(row, col);
+                    var cell = Cell.Closed(new(row, col));
                     cells[row, col] = cell;
                     sets[row, col] = new HashSet<Cell> { cell };
                 }
@@ -77,7 +83,7 @@ namespace Darkness.Maze
             return (cells, sets);
         }
 
-        private Queue<Edge> CreateEdges(int numRows, int numCols)
+        private Queue<Edge> CreateEdges(int numRows, int numCols, Random random)
         {
             var edges = new List<Edge>();
 
@@ -87,40 +93,43 @@ namespace Darkness.Maze
                 {
                     if (row > 0)
                     {
-                        edges.Add(new(row, col, row - 1, col));
+                        edges.Add(new(new(row, col), new(row - 1, col)));
                     }
 
                     if (col > 0)
                     {
-                        edges.Add(new(row, col, row, col - 1));
+                        edges.Add(new(new(row, col), new(row, col - 1)));
                     }
                 }
             }
 
-            edges.Shuffle(new Random());
+            edges.Shuffle(random);
 
             return new(edges);
         }
 
         private (Cell, Cell) ConnectCells(Cell firstCell, Cell secondCell)
         {
-            if (firstCell.Row == secondCell.Row && firstCell.Column + 1 == secondCell.Column)
+            var firstLocation = firstCell.Location;
+            var secondLocation = secondCell.Location;
+
+            if (firstLocation.Row == secondLocation.Row && firstLocation.Column + 1 == secondLocation.Column)
             {
                 return (firstCell with { Right = CellSide.Passage }, secondCell with { Left = CellSide.Passage });
-            } else if (firstCell.Row == secondCell.Row && firstCell.Column == secondCell.Column + 1)
+            } else if (firstLocation.Row == secondLocation.Row && firstLocation.Column == secondLocation.Column + 1)
             {
                 return (firstCell with { Left = CellSide.Passage }, secondCell with { Right = CellSide.Passage });
-            } else if (firstCell.Row == secondCell.Row + 1 && firstCell.Column == secondCell.Column)
+            } else if (firstLocation.Row == secondLocation.Row + 1 && firstLocation.Column == secondLocation.Column)
             {
                 return (firstCell with { Top = CellSide.Passage }, secondCell with { Bottom = CellSide.Passage });
-            } else if (firstCell.Row + 1 == secondCell.Row && firstCell.Column == secondCell.Column)
+            } else if (firstLocation.Row + 1 == secondLocation.Row && firstLocation.Column == secondLocation.Column)
             {
                 return (firstCell with { Bottom = CellSide.Passage }, secondCell with { Top = CellSide.Passage });
             } else
             {
                 throw new ArgumentException(
-                    $"Cells ({firstCell.Column}, {firstCell.Row}) and " +
-                    $"({secondCell.Column}, {secondCell.Row}) are not adjacent");
+                    $"Cells ({firstLocation.Column}, {firstLocation.Row}) and " +
+                    $"({secondLocation.Column}, {secondLocation.Row}) are not adjacent");
             }
         }
     }

@@ -1,20 +1,76 @@
 @inject ISettingsService SettingsService
 @inject IMazeGenerator MazeGenerator
+@inject IJSRuntime JSRuntime
 
-<div class="d-flex flex-column justify-center align-center">
-    <MudText class="d-flex justify-between align-content-stretch">
-        Still working on it.
-    </MudText>
+<div class="d-flex flex-column align-self-stretch w-100">
+    <div class="pa-4 w-100">
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
+                   @onclick="this.OnBackToMainMenuCallback">
+            Go Back
+        </MudButton>
+    </div>
+
+    <div @ref="this.CanvasContainer" class="d-flex flex-column justify-center align-center align-self-stretch w-100">
+        <Canvas @ref="this.Canvas">
+            It seems that you're using an old browser and the game won't work on it :(
+        </Canvas>
+    </div>
 </div>
 
 @code {
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
 
+    private ElementReference CanvasContainer { get; set; }
+
+    private Canvas Canvas { get; set; } = null!;
+
+    private RenderFragment CellFragment =>
+        @<MudPaper Elevation="0" Outlined="true" Square="true" />;
+
+    private GameMaze Maze { get; set; } = null!;
+    private Cell CurrentCell { get; set; } = null!;
+    private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;
+
+    private HashSet<Cell> VisibleCells { get; } = new();
+    private HashSet<Cell> PartiallyVisibleCells { get; } = new();
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         var settings = await this.SettingsService.GetSettings();
+
+        this.Maze = this.MazeGenerator.CreateMaze(settings);
+        this.CurrentCell = this.Maze.Start;
+
+        this.RecalculateVisiblities();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var window = await this.JSRuntime.Window();
+
+        var context = await this.Canvas.GetContext2DAsync();
+    }
+
+    private void RecalculateVisiblities()
+    {
+        this.VisibleCells.Clear();
+        this.PartiallyVisibleCells.Clear();
+
+        var currentCell = this.CurrentCell;
+
+        do
+        {
+            this.VisibleCells.Add(currentCell);
+
+            var (cell1, cell2) = this.Maze.GetOrthogonalCells(currentCell, this.CurrentDirection);
+            this.PartiallyVisibleCells.AddIfNotNull(cell1);
+            this.PartiallyVisibleCells.AddIfNotNull(cell2);
+
+            currentCell = this.Maze.GetNextCell(currentCell, this.CurrentDirection);
+        } while (currentCell != null);
     }
 }

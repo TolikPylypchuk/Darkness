@@ -1,52 +1,47 @@
-using System.Text;
+using System;
 
 namespace Darkness.Maze
 {
-    public enum CellSide { Passage, Wall }
-
-    public sealed record Cell(int Row, int Column, CellSide Left, CellSide Top, CellSide Right, CellSide Bottom)
+    public sealed record GameMaze(Cell[,] Cells, Cell Start, Cell Finish)
     {
-        public static Cell Closed(int row, int column) =>
-            new(row, column, CellSide.Wall, CellSide.Wall, CellSide.Wall, CellSide.Wall);
-    }
+        public Cell? GetCellToLeft(Cell cell) =>
+            cell.Left.IsOpen() && cell.Location.Column != 0
+                ? this.Cells[cell.Location.Row, cell.Location.Column - 1]
+                : null;
 
-    public sealed record GameMaze(Cell[,] Cells);
+        public Cell? GetCellToRight(Cell cell) =>
+            cell.Right.IsOpen() && cell.Location.Column != this.Cells.GetLength(1) - 1
+                ? this.Cells[cell.Location.Row, cell.Location.Column + 1]
+                : null;
 
-    public static class GameMazeExtensions
-    {
-        public static string ToSimpleString(this GameMaze maze)
-        {
-            var builder = new StringBuilder();
-            var cells = maze.Cells;
+        public Cell? GetUpperCell(Cell cell) =>
+            cell.Top.IsOpen() && cell.Location.Row != 0
+                ? this.Cells[cell.Location.Row - 1, cell.Location.Column]
+                : null;
 
-            var numRows = cells.GetLength(0);
-            var numCols = cells.GetLength(1);
+        public Cell? GetLowerCell(Cell cell) =>
+            cell.Bottom.IsOpen() && cell.Location.Row != this.Cells.GetLength(0) - 1
+                ? this.Cells[cell.Location.Row + 1, cell.Location.Column]
+                : null;
 
-            builder.Append(new string('-', numCols * 3 + 1)).AppendLine();
-
-            for (int row = 0; row < numRows; row++)
+        public Cell? GetNextCell(Cell cell, PlayerDirection direction) =>
+            direction switch
             {
-                builder.Append('|');
+                PlayerDirection.Left => this.GetCellToLeft(cell),
+                PlayerDirection.Right => this.GetCellToRight(cell),
+                PlayerDirection.Up => this.GetUpperCell(cell),
+                PlayerDirection.Down => this.GetLowerCell(cell),
+                _ => throw new ArgumentOutOfRangeException(nameof(direction))
+            };
 
-                for (int col = 0; col < numCols; col++)
-                {
-                    builder.Append("  ").Append(cells[row, col].Right.IsOpen() ? ' ' : '|');
-                }
-
-                builder.AppendLine().Append('-');
-
-                for (int col = 0; col < numCols; col++)
-                {
-                    builder.Append(cells[row, col].Bottom.IsOpen() ? "  " : "--").Append('-');
-                }
-
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
-        }
-
-        public static bool IsOpen(this CellSide side) =>
-            side == CellSide.Passage;
+        public (Cell?, Cell?) GetOrthogonalCells(Cell cell, PlayerDirection direction) =>
+            direction switch
+            {
+                PlayerDirection.Left or PlayerDirection.Right =>
+                    (this.GetUpperCell(cell), this.GetLowerCell(cell)),
+                PlayerDirection.Up or PlayerDirection.Down =>
+                    (this.GetCellToLeft(cell), this.GetCellToRight(cell)),
+                _ => throw new ArgumentOutOfRangeException(nameof(direction))
+            };
     }
 }
