@@ -2,20 +2,31 @@
 @inject IMazeGenerator MazeGenerator
 @inject IJSRuntime JSRuntime
 
-<div class="d-flex flex-column align-self-stretch w-100">
-    <div class="pa-4 w-100">
-        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
-                   @onclick="this.OnBackToMainMenuCallback">
-            Go Back
-        </MudButton>
-    </div>
+@if (this.IsLoaded)
+{
+    <div class="d-flex flex-column align-self-stretch w-100">
+        <div class="pa-4 w-100">
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
+                        @onclick="this.OnBackToMainMenuCallback">
+                Go Back
+            </MudButton>
+        </div>
 
-    <div @ref="this.CanvasContainer" class="d-flex flex-column justify-center align-center align-self-stretch w-100">
-        <Canvas @ref="this.Canvas">
-            It seems that you're using an old browser and the game won't work on it :(
-        </Canvas>
+        <div @ref="this.CanvasContainer" class="d-flex flex-column justify-center align-center align-self-stretch w-100">
+            <Canvas @ref="this.Canvas" class="d-flex flex-grow-1 align-self-stretch">
+                It seems that you're using an old browser and the game won't work on it :(
+            </Canvas>
+        </div>
     </div>
-</div>
+} else
+{
+    <div class="d-flex flex-column align-self-stretch justify-center w-100">
+        <div class="d-flex flex-column align-self-center">
+            <MudText Typo="Typo.h3" Class="ma-4">Creating the maze...</MudText>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ma-4" />
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -28,6 +39,8 @@
     private RenderFragment CellFragment =>
         @<MudPaper Elevation="0" Outlined="true" Square="true" />;
 
+    private bool IsLoaded { get; set; } = false;
+
     private GameMaze Maze { get; set; } = null!;
     private Cell CurrentCell { get; set; } = null!;
     private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;
@@ -35,24 +48,24 @@
     private HashSet<Cell> VisibleCells { get; } = new();
     private HashSet<Cell> PartiallyVisibleCells { get; } = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-
-        var settings = await this.SettingsService.GetSettings();
-
-        this.Maze = this.MazeGenerator.CreateMaze(settings);
-        this.CurrentCell = this.Maze.Start;
-
-        this.RecalculateVisiblities();
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        var window = await this.JSRuntime.Window();
 
-        var context = await this.Canvas.GetContext2DAsync();
+        if (firstRender)
+        {
+            var settings = await this.SettingsService.GetSettings();
+
+            this.StateHasChanged();
+
+            this.Maze = await this.MazeGenerator.CreateMaze(settings);
+            this.CurrentCell = this.Maze.Start;
+
+            this.RecalculateVisiblities();
+
+            this.IsLoaded = true;
+            this.StateHasChanged();
+        }
     }
 
     private void RecalculateVisiblities()

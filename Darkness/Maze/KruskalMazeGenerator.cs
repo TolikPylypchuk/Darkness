@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Darkness.Settings;
 
@@ -9,7 +10,7 @@ namespace Darkness.Maze
     {
         private sealed record Edge(Location FirstLocation, Location SecondLocation);
 
-        public GameMaze CreateMaze(GameSettings settings)
+        public async Task<GameMaze> CreateMaze(GameSettings settings)
         {
             var random = new Random();
 
@@ -20,8 +21,14 @@ namespace Darkness.Maze
 
             var edges = this.CreateEdges(numRows, numCols, random);
 
+            int i = 0;
             while (edges.TryDequeue(out var edge))
             {
+                if (i++ % 10 == 0)
+                {
+                    await Task.Delay(1);
+                }
+
                 var firstSet = sets.Get(edge.FirstLocation);
                 var secondSet = sets.Get(edge.SecondLocation);
 
