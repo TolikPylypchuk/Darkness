@@ -12,7 +12,7 @@
                 <MainMenu OnPlayCallback="this.OpenMazeCanvas" OnSettingsCallback="this.OpenSettings" />
                 break;
             case Page.MazeCanvas:
-                <MazeCanvas OnBackToMainMenuCallback="this.OpenMainMenu" />
+                <MazeCanvas @ref="this.MazeCanvas" OnBackToMainMenuCallback="this.OpenMainMenu" />
                 break;
             case Page.SettingsForm:
                 <SettingsForm OnBackToMainMenuCallback="this.OpenMainMenu" />
@@ -36,6 +36,8 @@
 
     private Page CurrentPage { get; set; } = Page.MainMenu;
 
+    private MazeCanvas? MazeCanvas { get; set; } = null!;
+
     private string CurrentPageTitle =>
         this.CurrentPage switch
         {
@@ -50,11 +52,15 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await this.History.OnPop(page =>
+        await this.History.OnPop(async page =>
         {
+            if (this.CurrentPage == Page.MazeCanvas && this.MazeCanvas != null)
+            {
+                await this.MazeCanvas.BackToMainMenu();
+            }
+
             this.CurrentPage = page;
             this.StateHasChanged();
-            return ValueTask.CompletedTask;
         });
     }
 
