@@ -52,15 +52,16 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await this.History.OnPop(async page =>
+        await this.History.OnPop(page =>
         {
             if (this.CurrentPage == Page.MazeCanvas && this.MazeCanvas != null)
             {
-                await this.MazeCanvas.BackToMainMenu();
+                this.MazeCanvas.CancelIfGeneratingMaze();
             }
 
             this.CurrentPage = page;
             this.StateHasChanged();
+            return ValueTask.CompletedTask;
         });
     }
 

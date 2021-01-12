@@ -38,7 +38,7 @@
         @<MudPaper Elevation="0" Outlined="true" Square="true" />;
 
     private bool IsLoaded { get; set; } = false;
-    private CancellationTokenSource CancellationTokenSource { get; set; } = new();
+    private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
 
     private GameMaze Maze { get; set; } = null!;
     private Cell CurrentCell { get; set; } = null!;
@@ -47,10 +47,9 @@
     private HashSet<Cell> VisibleCells { get; } = new();
     private HashSet<Cell> PartiallyVisibleCells { get; } = new();
 
-    public async Task BackToMainMenu()
+    public void CancelIfGeneratingMaze()
     {
-        this.CancellationTokenSource.Cancel();
-        await this.OnBackToMainMenuCallback.InvokeAsync();
+        this.MazeGenerationTokenSource.Cancel();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -65,7 +64,7 @@
 
             try
             {
-                this.Maze = await this.MazeGenerator.CreateMaze(settings, this.CancellationTokenSource.Token);
+                this.Maze = await this.MazeGenerator.CreateMaze(settings, this.MazeGenerationTokenSource.Token);
                 this.CurrentCell = this.Maze.Start;
 
                 this.RecalculateVisiblities();
@@ -75,6 +74,12 @@
             } catch (TaskCanceledException)
             { }
         }
+    }
+
+    private async Task BackToMainMenu()
+    {
+        this.CancelIfGeneratingMaze();
+        await this.OnBackToMainMenuCallback.InvokeAsync();
     }
 
     private void RecalculateVisiblities()

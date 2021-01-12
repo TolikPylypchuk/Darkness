@@ -16,7 +16,7 @@ namespace Darkness.History
 
         public async ValueTask Push(T value, string title)
         {
-            var window = await this.jsRuntime.Window();            
+            var window = await this.jsRuntime.Window();
             await window.History.PushState(value, title);
         }
 
