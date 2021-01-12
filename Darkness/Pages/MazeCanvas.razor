@@ -3,7 +3,7 @@
 @inject IJSRuntime JSRuntime
 
 <div class="d-flex flex-column align-self-stretch w-100">
-    <div class="pa-4 w-100">
+    <div class="pt-4 px-4 w-100">
         <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
                    @onclick="this.BackToMainMenu">
             Go Back
@@ -13,9 +13,6 @@
     <div class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100">
         @if (this.IsLoaded)
         {
-            <Canvas @ref="this.Canvas" class="d-flex flex-grow-1 align-self-stretch">
-                It seems that you're using an old browser and the game won't work on it :(
-            </Canvas>
         } else
         {
             <div class="d-flex flex-column align-self-stretch justify-center w-100">
@@ -29,10 +26,10 @@
 </div>
 
 @code {
+    private const int CellSize = 24;
+
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
-
-    private Canvas? Canvas { get; set; }
 
     private RenderFragment CellFragment =>
         @<MudPaper Elevation="0" Outlined="true" Square="true" />;
