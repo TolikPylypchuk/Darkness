@@ -44,5 +44,14 @@ namespace Darkness
                 collection.Add(item);
             }
         }
+
+        public static void RemoveIfNotNull<T>(this ICollection<T> collection, T? item)
+            where T : class
+        {
+            if (item is not null)
+            {
+                collection.Remove(item);
+            }
+        }
     }
 }

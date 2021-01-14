@@ -26,12 +26,15 @@ body {
     right: 0;
 }
 
+.no-focus:focus {
+    outline: none;
+}
+
 .maze-cell {
     position: absolute;
 }
 
 .maze-cell-partial {
-    position: absolute;
     opacity: 0.2;
 }
 

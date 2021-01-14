@@ -1,7 +1,3 @@
-@inject ISettingsService SettingsService
-@inject IMazeGenerator MazeGenerator
-@inject IJSRuntime JSRuntime
-
 <div class="d-flex flex-column align-self-stretch w-100">
     <div class="d-flex flex-row justify-space-between pa-4 w-100">
         <div class="row-side">
@@ -16,7 +12,8 @@
         <div class="row-side"></div>
     </div>
 
-    <div class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100 pa-4">
+    <div @ref="this.MazeWrapper" @onkeyup="this.OnKeyUp" tabindex="0"
+         class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100 pa-4 no-focus">
         @if (this.IsLoaded)
         {
             <div class="maze-wrapper"
@@ -26,116 +23,25 @@
                 {
                     <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
                               Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                              Direction="cell == this.CurrentCell ? this.CurrentDirection : null" />
+                              Direction="cell == this.CurrentCell ? this.CurrentDirection : null"
+                              IsFinish="cell == this.Maze.Finish" />
                 }
-                
+
                 @foreach (var cell in this.PartiallyVisibleCells)
                 {
                     <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
-                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="true" Direction="null" />
+                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="true" Direction="null"
+                              IsFinish="false" />
                 }
             </div>
         } else
         {
-        <div class="d-flex flex-column align-self-stretch justify-center w-100">
-            <div class="d-flex flex-column align-self-center">
-                <MudText Typo="Typo.h3" Class="ma-4">Creating the maze...</MudText>
-                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ma-4" />
+            <div class="d-flex flex-column align-self-stretch justify-center w-100">
+                <div class="d-flex flex-column align-self-center">
+                    <MudText Typo="Typo.h3" Class="ma-4">Creating the maze...</MudText>
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ma-4" />
+                </div>
             </div>
-        </div>
         }
     </div>
 </div>
-
-@code {
-    private const int CellSize = 24;
-
-    [Parameter]
-    public EventCallback OnBackToMainMenuCallback { get; set; }
-
-    private bool IsLoaded { get; set; } = false;
-    private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
-
-    private GameMaze Maze { get; set; } = null!;
-    private Cell CurrentCell { get; set; } = null!;
-    private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;
-
-    private HashSet<Cell> VisibleCells { get; } = new();
-    private HashSet<Cell> PartiallyVisibleCells { get; } = new();
-
-    private double MazeWidth { get; set; }
-    private double MazeHeight { get; set; }
-
-    private double CellWidth { get; set; }
-    private double CellHeight { get; set; }
-
-    public void CancelIfGeneratingMaze()
-    {
-        this.MazeGenerationTokenSource.Cancel();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-
-        var settings = await this.SettingsService.GetSettings();
-
-        double mazeWidth = settings.MazeWidth;
-        double mazeHeight = settings.MazeHeight;
-
-        this.MazeWidth = mazeWidth / mazeHeight * 100;
-        this.MazeHeight = mazeHeight / mazeWidth * 100;
-
-        this.CellWidth = 1.0 / mazeWidth * 100;
-        this.CellHeight = 1.0 / mazeHeight * 100;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            var settings = await this.SettingsService.GetSettings();
-
-            this.StateHasChanged();
-
-            try
-            {
-                this.Maze = await this.MazeGenerator.CreateMaze(settings, this.MazeGenerationTokenSource.Token);
-                this.CurrentCell = this.Maze.Start;
-
-                this.RecalculateVisiblities();
-
-                this.IsLoaded = true;
-                this.StateHasChanged();
-            } catch (TaskCanceledException)
-            { }
-        }
-    }
-
-    private async Task BackToMainMenu()
-    {
-        this.CancelIfGeneratingMaze();
-        await this.OnBackToMainMenuCallback.InvokeAsync();
-    }
-
-    private void RecalculateVisiblities()
-    {
-        this.VisibleCells.Clear();
-        this.PartiallyVisibleCells.Clear();
-
-        var currentCell = this.CurrentCell;
-
-        do
-        {
-            this.VisibleCells.Add(currentCell);
-
-            var (cell1, cell2) = this.Maze.GetOrthogonalCells(currentCell, this.CurrentDirection);
-            this.PartiallyVisibleCells.AddIfNotNull(cell1);
-            this.PartiallyVisibleCells.AddIfNotNull(cell2);
-
-            currentCell = this.Maze.GetNextCell(currentCell, this.CurrentDirection);
-        } while (currentCell != null);
-    }
-}
