@@ -3,17 +3,37 @@
 @inject IJSRuntime JSRuntime
 
 <div class="d-flex flex-column align-self-stretch w-100">
-    <div class="pt-4 px-4 w-100">
-        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
-                   @onclick="this.BackToMainMenu">
-            Go Back
-        </MudButton>
+    <div class="d-flex flex-row justify-space-between pa-4 w-100">
+        <div class="row-side">
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
+                       @onclick="this.BackToMainMenu">
+                Go Back
+            </MudButton>
+        </div>
+
+        <MudText Typo="Typo.h5">Darkness</MudText>
+
+        <div class="row-side"></div>
     </div>
 
     <div class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100 pa-4">
         @if (this.IsLoaded)
         {
-            <div class="maze-wrapper" style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw")>
+            <div class="maze-wrapper"
+                 style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; " +
+                         $"background-color: {Colors.Grey.Darken4}")>
+                @foreach (var cell in this.VisibleCells)
+                {
+                    <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
+                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
+                              Direction="cell == this.CurrentCell ? this.CurrentDirection : null" />
+                }
+                
+                @foreach (var cell in this.PartiallyVisibleCells)
+                {
+                    <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
+                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="true" Direction="null" />
+                }
             </div>
         } else
         {
@@ -33,9 +53,6 @@
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
 
-    private RenderFragment CellFragment =>
-        @<MudPaper Elevation="0" Outlined="true" Square="true" />;
-
     private bool IsLoaded { get; set; } = false;
     private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
 
@@ -48,6 +65,9 @@
 
     private double MazeWidth { get; set; }
     private double MazeHeight { get; set; }
+
+    private double CellWidth { get; set; }
+    private double CellHeight { get; set; }
 
     public void CancelIfGeneratingMaze()
     {
@@ -65,6 +85,9 @@
 
         this.MazeWidth = mazeWidth / mazeHeight * 100;
         this.MazeHeight = mazeHeight / mazeWidth * 100;
+
+        this.CellWidth = 1.0 / mazeWidth * 100;
+        this.CellHeight = 1.0 / mazeHeight * 100;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

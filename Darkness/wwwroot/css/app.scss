@@ -26,6 +26,20 @@ body {
     right: 0;
 }
 
+.maze-cell {
+    position: absolute;
+}
+
+.maze-cell-partial {
+    position: absolute;
+    opacity: 0.2;
+}
+
+.row-side {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
 #blazor-error-ui {
     background: #32333D;
     bottom: 0;

@@ -1,0 +1,42 @@
+<MudPaper Elevation="0" Outlined="true" Square="true"
+          Class=@(this.IsPartial ? "maze-cell-partial" : "maze-cell" + " d-flex justify-center align-center")
+          Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; " +
+                  $"height: {this.Height}%; background-color: {Colors.Grey.Lighten2}")>
+    @switch (this.Direction)
+    {
+        case null:
+            break;
+        case PlayerDirection.Left:
+            <MudIcon Icon="@Icons.Material.KeyboardArrowLeft" Color="Color.Primary" Class="w-100 h-100" />
+            break;
+        case PlayerDirection.Right:
+            <MudIcon Icon="@Icons.Material.KeyboardArrowRight" Color="Color.Primary" Class="w-100 h-100" />
+            break;
+        case PlayerDirection.Up:
+            <MudIcon Icon="@Icons.Material.KeyboardArrowUp" Color="Color.Primary" Class="w-100 h-100" />
+            break;
+        case PlayerDirection.Down:
+            <MudIcon Icon="@Icons.Material.KeyboardArrowDown" Color="Color.Primary" Class="w-100 h-100" />
+            break;
+    }
+</MudPaper>
+
+@code {
+    [Parameter]
+    public double X { get; set; }
+
+    [Parameter]
+    public double Y { get; set; }
+
+    [Parameter]
+    public double Width { get; set; }
+
+    [Parameter]
+    public double Height { get; set; }
+
+    [Parameter]
+    public bool IsPartial { get; set; }
+
+    [Parameter]
+    public PlayerDirection? Direction { get; set; }
+}
