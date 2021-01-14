@@ -103,6 +103,8 @@ namespace Darkness.Pages
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
 
+            this.VisibleCells.Add(this.Maze.Finish);
+
             var currentCell = this.CurrentCell;
 
             do
@@ -117,7 +119,7 @@ namespace Darkness.Pages
             } while (currentCell != null);
         }
 
-        private void OnKeyUp(KeyboardEventArgs e)
+        private void OnKeyDown(KeyboardEventArgs e)
         {
             var direction = this.DirectionFromKey(e.Key);
 

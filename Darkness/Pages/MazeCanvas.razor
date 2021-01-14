@@ -12,7 +12,7 @@
         <div class="row-side"></div>
     </div>
 
-    <div @ref="this.MazeWrapper" @onkeyup="this.OnKeyUp" tabindex="0"
+    <div @ref="this.MazeWrapper" @onkeydown="this.OnKeyDown" tabindex="0"
          class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100 pa-4 no-focus">
         @if (this.IsLoaded)
         {
