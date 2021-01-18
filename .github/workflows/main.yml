@@ -20,3 +20,4 @@ jobs:
         FOLDER: build/wwwroot
         COMMIT_MESSAGE: "Deploy to GitHub Pages"
         SINGLE_COMMIT: true
+        CLEAN_EXCLUDE: '[ ".gitignore", ".gitattributes", "CNAME" ]'
