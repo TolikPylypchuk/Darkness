@@ -1,4 +1,4 @@
-<MudPaper Elevation="0" Square="true" Class=@(this.IsPartial ? "maze-cell-partial" : "maze-cell")
+<MudPaper Elevation="0" Square="true" Class=@((this.IsPartial ? "maze-cell-partial" : "maze-cell") + " back")
           Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; height: {this.Height}%; " +
                   $"background-color: {this.BackgroundColor}")>
     @if (this.Icon != null)

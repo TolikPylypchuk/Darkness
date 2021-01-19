@@ -40,6 +40,14 @@ body {
     flex-basis: 0;
 }
 
+.front {
+    z-index: 10;
+}
+
+.back {
+    z-index: 1;
+}
+
 #blazor-error-ui {
     background: #32333D;
     bottom: 0;
