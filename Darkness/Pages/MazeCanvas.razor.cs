@@ -119,10 +119,19 @@ namespace Darkness.Pages
             } while (currentCell != null);
         }
 
-        private void OnKeyDown(KeyboardEventArgs e)
-        {
-            var direction = this.DirectionFromKey(e.Key);
+        private void OnKeyDown(KeyboardEventArgs e) =>
+            this.Move(
+                e.Key switch
+                {
+                    ArrowLeft => PlayerDirection.Left,
+                    ArrowRight => PlayerDirection.Right,
+                    ArrowUp => PlayerDirection.Up,
+                    ArrowDown => PlayerDirection.Down,
+                    _ => null
+                });
 
+        private void Move(PlayerDirection? direction)
+        {
             if (direction == this.CurrentDirection)
             {
                 this.Move();
@@ -131,16 +140,6 @@ namespace Darkness.Pages
                 this.Turn(directionToTurn);
             }
         }
-
-        private PlayerDirection? DirectionFromKey(string key) =>
-            key switch
-            {
-                ArrowLeft => PlayerDirection.Left,
-                ArrowRight => PlayerDirection.Right,
-                ArrowUp => PlayerDirection.Up,
-                ArrowDown => PlayerDirection.Down,
-                _ => null
-            };
 
         private void Move()
         {
