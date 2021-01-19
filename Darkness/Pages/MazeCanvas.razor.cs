@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +7,8 @@ using Darkness.Settings;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+
+using MudBlazor;
 
 namespace Darkness.Pages
 {
@@ -27,6 +28,9 @@ namespace Darkness.Pages
         [Inject]
         private IMazeGenerator MazeGenerator { get; set; } = null!;
 
+        [Inject]
+        private ISnackbar Snackbar { get; set; } = null!;
+
         private ElementReference MazeWrapper { get; set; }
 
         private bool IsLoaded { get; set; } = false;
@@ -35,6 +39,8 @@ namespace Darkness.Pages
         private GameMaze Maze { get; set; } = null!;
         private Cell CurrentCell { get; set; } = null!;
         private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;
+
+        private bool IsFinished { get; set; } = false;
 
         private HashSet<Cell> VisibleCells { get; } = new();
         private HashSet<Cell> PartiallyVisibleCells { get; } = new();
@@ -132,6 +138,11 @@ namespace Darkness.Pages
 
         private void Move(PlayerDirection? direction)
         {
+            if (this.IsFinished)
+            {
+                return;
+            }
+
             if (direction == this.CurrentDirection)
             {
                 this.Move();
@@ -154,6 +165,11 @@ namespace Darkness.Pages
                 this.PartiallyVisibleCells.RemoveIfNotNull(cell2);
 
                 this.CurrentCell = nextCell;
+
+                if (Equals(this.CurrentCell, this.Maze.Finish))
+                {
+                    this.Finish();
+                }
             }
         }
 
@@ -161,6 +177,21 @@ namespace Darkness.Pages
         {
             this.CurrentDirection = direction;
             this.RecalculateVisiblities();
+        }
+
+        private void Finish()
+        {
+            this.IsFinished = true;
+
+            this.VisibleCells.Clear();
+            this.PartiallyVisibleCells.Clear();
+
+            foreach (var cell in this.Maze.Cells)
+            {
+                this.VisibleCells.Add(cell);
+            }
+
+            this.Snackbar.Add("You won!", Severity.Success);
         }
     }
 }
