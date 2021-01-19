@@ -1,0 +1,83 @@
+.maze-wrapper {
+    width: calc(100vw - 60px);
+    max-height: calc(100vh - 100px);
+    margin: auto;
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.maze-cell {
+    position: absolute;
+}
+
+.maze-cell-partial {
+    @extend .maze-cell;
+    opacity: 0.35;
+}
+
+.cell-wall {
+    position: absolute;
+}
+
+.cell-wall-h {
+    @extend .cell-wall;
+    width: 90%;
+    height: 5%;
+    left: 5%;
+}
+
+.cell-wall-top {
+    @extend .cell-wall-h;
+    top: 0%;
+}
+
+.cell-wall-bottom {
+    @extend .cell-wall-h;
+    top: 95%;
+}
+
+.cell-wall-v {
+    @extend .cell-wall;
+    width: 5%;
+    height: 90%;
+    top: 5%
+}
+
+.cell-wall-left {
+    @extend .cell-wall-v;
+    left: 0%;
+}
+
+.cell-wall-right {
+    @extend .cell-wall-v;
+    left: 95%;
+}
+
+.cell-corner {
+    @extend .cell-wall;
+    width: 5%;
+    height: 5%;
+}
+
+.cell-corner-top {
+    @extend .cell-corner;
+    top: 0%;
+}
+
+.cell-corner-bottom {
+    @extend .cell-corner;
+    top: 95%;
+}
+
+.cell-corner-left {
+    @extend .cell-corner;
+    left: 0%;
+}
+
+.cell-corner-right {
+    @extend .cell-corner;
+    left: 95%;
+}

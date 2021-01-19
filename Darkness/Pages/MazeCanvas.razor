@@ -21,17 +21,15 @@
                          $"background-color: {Colors.Grey.Darken4}")>
                 @foreach (var cell in this.VisibleCells)
                 {
-                    <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
-                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                              Direction="cell == this.CurrentCell ? this.CurrentDirection : null"
-                              IsFinish="cell == this.Maze.Finish" />
+                    <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
+                              Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
+                              IsFinish="Equals(cell, this.Maze.Finish)" />
                 }
 
                 @foreach (var cell in this.PartiallyVisibleCells)
                 {
-                    <MazeCell X="cell.Location.Column * this.CellWidth" Y="cell.Location.Row * this.CellHeight"
-                              Width="this.CellWidth" Height="this.CellHeight" IsPartial="true" Direction="null"
-                              IsFinish="false" />
+                    <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
+                              Direction="null" IsFinish="false" />
                 }
 
                 <div class="d-flex flex-column w-100 h-100">

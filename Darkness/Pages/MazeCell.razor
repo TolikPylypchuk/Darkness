@@ -1,20 +1,45 @@
-<MudPaper Elevation="0" Outlined="true" Square="true"
-          Class=@((this.IsPartial ? "maze-cell-partial" : "") + " maze-cell d-flex justify-center align-center")
+<MudPaper Elevation="0" Square="true" Class=@(this.IsPartial ? "maze-cell-partial" : "maze-cell")
           Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; " +
                   $"height: {this.Height}%; background-color: " +
                   (this.IsFinish ? Colors.DeepPurple.Default : Colors.Grey.Lighten2))>
     @if (this.Icon != null)
     {
-        <MudIcon Icon="@this.Icon" Color="Color.Primary" Class="w-100 h-100" />
+        <MudIcon Icon="@this.Icon" Color="Color.Primary"
+                 Style="width: 90%; height: 90%; top: 5%; left: 5%; position: absolute" />
+    }
+
+    @if (!this.IsFinish && !this.IsPartial)
+    {
+        <div class="cell-corner-top cell-corner-left" style="@this.WallStyle"></div>
+        <div class="cell-corner-top cell-corner-right" style="@this.WallStyle"></div>
+        <div class="cell-corner-bottom cell-corner-left" style="@this.WallStyle"></div>
+        <div class="cell-corner-bottom cell-corner-right" style="@this.WallStyle"></div>
+
+        if (!this.Cell.Top.IsOpen())
+        {
+            <div class="cell-wall-top" style="@this.WallStyle"></div>
+        }
+
+        if (!this.Cell.Bottom.IsOpen())
+        {
+            <div class="cell-wall-bottom" style="@this.WallStyle"></div>
+        }
+
+        if (!this.Cell.Left.IsOpen())
+        {
+            <div class="cell-wall-left" style="@this.WallStyle"></div>
+        }
+
+        if (!this.Cell.Right.IsOpen())
+        {
+            <div class="cell-wall-right" style="@this.WallStyle"></div>
+        }
     }
 </MudPaper>
 
 @code {
     [Parameter]
-    public double X { get; set; }
-
-    [Parameter]
-    public double Y { get; set; }
+    public Cell Cell { get; set; } = null!;
 
     [Parameter]
     public double Width { get; set; }
@@ -31,11 +56,19 @@
     [Parameter]
     public bool IsFinish { get; set; }
 
+    private double X { get; set; }
+    private double Y { get; set; }
+
     private string? Icon { get; set; }
+
+    private string WallStyle { get; } = $"background-color: {Colors.Grey.Darken3}";
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        this.X = this.Cell.Location.Column * this.Width;
+        this.Y = this.Cell.Location.Row * this.Height;
 
         this.Icon = this.Direction switch
         {

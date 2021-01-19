@@ -31,27 +31,8 @@ body {
     min-height: 100vh;
 }
 
-.maze-wrapper {
-    width: calc(100vw - 60px);
-    max-height: calc(100vh - 100px);
-    margin: auto;
-    position: absolute;
-    top: 30px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
 .no-focus:focus {
     outline: none;
-}
-
-.maze-cell {
-    position: absolute;
-}
-
-.maze-cell-partial {
-    opacity: 0.2;
 }
 
 .row-side {
