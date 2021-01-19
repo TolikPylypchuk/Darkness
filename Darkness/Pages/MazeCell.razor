@@ -1,7 +1,6 @@
 <MudPaper Elevation="0" Square="true" Class=@(this.IsPartial ? "maze-cell-partial" : "maze-cell")
-          Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; " +
-                  $"height: {this.Height}%; background-color: " +
-                  (this.IsFinish ? Colors.DeepPurple.Default : Colors.Grey.Lighten2))>
+          Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; height: {this.Height}%; " +
+                  $"background-color: {this.BackgroundColor}")>
     @if (this.Icon != null)
     {
         <MudIcon Icon="@this.Icon" Color="Color.Primary"
@@ -54,6 +53,9 @@
     public PlayerDirection? Direction { get; set; }
 
     [Parameter]
+    public bool IsStart { get; set; }
+
+    [Parameter]
     public bool IsFinish { get; set; }
 
     private double X { get; set; }
@@ -62,6 +64,8 @@
     private string? Icon { get; set; }
 
     private string WallStyle { get; } = $"background-color: {Colors.Grey.Darken3}";
+
+    private string BackgroundColor { get; set; } = String.Empty;
 
     protected override void OnParametersSet()
     {
@@ -78,5 +82,9 @@
             PlayerDirection.Down => Icons.Material.KeyboardArrowDown,
             _ => null
         };
+
+        this.BackgroundColor = this.IsStart
+            ? Colors.Pink.Lighten1
+            : this.IsFinish ? Colors.DeepPurple.Lighten1 : Colors.Grey.Lighten2;
     }
 }

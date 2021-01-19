@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -118,14 +120,22 @@ namespace Darkness.Pages
                 this.VisibleCells.Add(currentCell);
 
                 var (cell1, cell2) = this.Maze.GetOrthogonalCells(currentCell, this.CurrentDirection);
-                this.PartiallyVisibleCells.AddIfNotNull(cell1);
-                this.PartiallyVisibleCells.AddIfNotNull(cell2);
+
+                if (!Equals(cell1, this.Maze.Finish))
+                {
+                    this.PartiallyVisibleCells.AddIfNotNull(cell1);
+                }
+
+                if (!Equals(cell2, this.Maze.Finish))
+                {
+                    this.PartiallyVisibleCells.AddIfNotNull(cell2);
+                }
 
                 currentCell = this.Maze.GetNextCell(currentCell, this.CurrentDirection);
             } while (currentCell != null);
         }
 
-        private void OnKeyDown(KeyboardEventArgs e) =>
+        private Task OnKeyDown(KeyboardEventArgs e) =>
             this.Move(
                 e.Key switch
                 {
@@ -136,7 +146,7 @@ namespace Darkness.Pages
                     _ => null
                 });
 
-        private void Move(PlayerDirection? direction)
+        private async Task Move(PlayerDirection? direction)
         {
             if (this.IsFinished)
             {
@@ -145,14 +155,14 @@ namespace Darkness.Pages
 
             if (direction == this.CurrentDirection)
             {
-                this.Move();
+                await this.Move();
             } else if (direction is PlayerDirection directionToTurn)
             {
                 this.Turn(directionToTurn);
             }
         }
 
-        private void Move()
+        private async Task Move()
         {
             var nextCell = this.Maze.GetNextCell(this.CurrentCell, this.CurrentDirection);
 
@@ -168,7 +178,7 @@ namespace Darkness.Pages
 
                 if (Equals(this.CurrentCell, this.Maze.Finish))
                 {
-                    this.Finish();
+                    await this.Finish();
                 }
             }
         }
@@ -179,19 +189,45 @@ namespace Darkness.Pages
             this.RecalculateVisiblities();
         }
 
-        private void Finish()
+        private async Task Finish()
         {
             this.IsFinished = true;
+
+            this.Snackbar.Add("You won!", Severity.Success);
 
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
 
-            foreach (var cell in this.Maze.Cells)
-            {
-                this.VisibleCells.Add(cell);
-            }
+            var random = new Random();
 
-            this.Snackbar.Add("You won!", Severity.Success);
+            var cellsToShow = new Queue<Cell>();
+            cellsToShow.Enqueue(this.Maze.Start);
+
+            int i = 0;
+            while (cellsToShow.Count > 0)
+            {
+                if (i++ % 10 == 0)
+                {
+                    this.StateHasChanged();
+                    await Task.Delay(10);
+                }
+
+                var currentCell = cellsToShow.Dequeue();
+
+                this.VisibleCells.Add(currentCell);
+
+                var nextCells = new List<Cell>();
+                nextCells.AddIfNotNull(this.Maze.GetUpperCell(currentCell));
+                nextCells.AddIfNotNull(this.Maze.GetLowerCell(currentCell));
+                nextCells.AddIfNotNull(this.Maze.GetCellToLeft(currentCell));
+                nextCells.AddIfNotNull(this.Maze.GetCellToRight(currentCell));
+                nextCells.Shuffle(random);
+
+                foreach (var cell in nextCells.Where(c => !this.VisibleCells.Contains(c)))
+                {
+                    cellsToShow.Enqueue(cell);
+                }
+            }
         }
     }
 }

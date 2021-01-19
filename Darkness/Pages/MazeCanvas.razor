@@ -23,13 +23,13 @@
                 {
                     <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
                               Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
-                              IsFinish="Equals(cell, this.Maze.Finish)" />
+                              IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)" />
                 }
 
                 @foreach (var cell in this.PartiallyVisibleCells)
                 {
                     <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
-                              Direction="null" IsFinish="false" />
+                              Direction="null" IsStart="false" IsFinish="false" />
                 }
 
                 <div class="d-flex flex-column w-100 h-100">
