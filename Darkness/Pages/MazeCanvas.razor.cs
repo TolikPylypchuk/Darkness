@@ -38,6 +38,7 @@ namespace Darkness.Pages
         private bool IsLoaded { get; set; } = false;
         private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
 
+        private GameSettings Settings { get; set; } = null!;
         private GameMaze Maze { get; set; } = null!;
         private Cell CurrentCell { get; set; } = null!;
         private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;
@@ -62,10 +63,10 @@ namespace Darkness.Pages
         {
             await base.OnInitializedAsync();
 
-            var settings = await this.SettingsService.GetSettings();
+            this.Settings = await this.SettingsService.GetSettings();
 
-            double mazeWidth = settings.MazeWidth;
-            double mazeHeight = settings.MazeHeight;
+            double mazeWidth = this.Settings.MazeWidth;
+            double mazeHeight = this.Settings.MazeHeight;
 
             this.MazeWidth = mazeWidth / mazeHeight * 100;
             this.MazeHeight = mazeHeight / mazeWidth * 100;
@@ -78,26 +79,28 @@ namespace Darkness.Pages
         {
             await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
+            if (!firstRender)
             {
-                var settings = await this.SettingsService.GetSettings();
+                return;
+            }
 
+            var settings = await this.SettingsService.GetSettings();
+
+            this.StateHasChanged();
+
+            try
+            {
+                this.Maze = await this.MazeGenerator.CreateMaze(settings, this.MazeGenerationTokenSource.Token);
+                this.CurrentCell = this.Maze.Start;
+
+                this.RecalculateVisiblities();
+
+                this.IsLoaded = true;
                 this.StateHasChanged();
 
-                try
-                {
-                    this.Maze = await this.MazeGenerator.CreateMaze(settings, this.MazeGenerationTokenSource.Token);
-                    this.CurrentCell = this.Maze.Start;
-
-                    this.RecalculateVisiblities();
-
-                    this.IsLoaded = true;
-                    this.StateHasChanged();
-
-                    await this.MazeWrapper.FocusAsync();
-                } catch (TaskCanceledException)
-                { }
-            }
+                await this.MazeWrapper.FocusAsync();
+            } catch (TaskCanceledException)
+            { }
         }
 
         private async Task BackToMainMenu()
@@ -111,8 +114,6 @@ namespace Darkness.Pages
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
 
-            this.VisibleCells.Add(this.Maze.Finish);
-
             var currentCell = this.CurrentCell;
 
             do
@@ -121,12 +122,12 @@ namespace Darkness.Pages
 
                 var (cell1, cell2) = this.Maze.GetOrthogonalCells(currentCell, this.CurrentDirection);
 
-                if (!Equals(cell1, this.Maze.Finish))
+                if (!this.Settings.AlwaysShowFinish || !Equals(cell1, this.Maze.Finish))
                 {
                     this.PartiallyVisibleCells.AddIfNotNull(cell1);
                 }
 
-                if (!Equals(cell2, this.Maze.Finish))
+                if (!this.Settings.AlwaysShowFinish || !Equals(cell2, this.Maze.Finish))
                 {
                     this.PartiallyVisibleCells.AddIfNotNull(cell2);
                 }

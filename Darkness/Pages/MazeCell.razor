@@ -7,7 +7,7 @@
                  Style="width: 90%; height: 90%; top: 5%; left: 5%; position: absolute" />
     }
 
-    @if (!this.IsFinish && !this.IsPartial)
+    @if (this.RenderWalls)
     {
         <div class="cell-corner-top cell-corner-left" style="@this.WallStyle"></div>
         <div class="cell-corner-top cell-corner-right" style="@this.WallStyle"></div>
@@ -57,6 +57,9 @@
 
     [Parameter]
     public bool IsFinish { get; set; }
+
+    [Parameter]
+    public bool RenderWalls { get; set; }
 
     private double X { get; set; }
     private double Y { get; set; }

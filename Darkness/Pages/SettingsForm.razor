@@ -21,6 +21,10 @@
                     }
                 </MudSelect>
             </MudItem>
+            <MudItem xs="12">
+                <MudCheckBox T="bool" Label="Always show the finish cell"
+                             @bind-Checked="this.AlwaysShowFinish" Class="ma-2" />
+            </MudItem>
         </MudGrid>
     </MudForm>
 
@@ -47,6 +51,7 @@
 
     private int MazeWidth { get; set; }
     private int MazeHeight { get; set; }
+    private bool AlwaysShowFinish { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,7 +61,7 @@
 
     private async Task Save()
     {
-        await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight));
+        await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight, this.AlwaysShowFinish));
         await this.OnBackToMainMenuCallback.InvokeAsync();
     }
 
@@ -70,5 +75,6 @@
     {
         this.MazeWidth = settings.MazeWidth;
         this.MazeHeight = settings.MazeHeight;
+        this.AlwaysShowFinish = settings.AlwaysShowFinish;
     }
 }

@@ -8,6 +8,6 @@ namespace Darkness.Settings
         public abstract ValueTask SaveSettings(GameSettings settings);
 
         public virtual ValueTask<GameSettings> GetDefaultSettings() =>
-            ValueTask.FromResult(new GameSettings(100, 50));
+            ValueTask.FromResult(new GameSettings(25, 25, true));
     }
 }
