@@ -199,23 +199,23 @@ namespace Darkness.Pages
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
 
+            await this.ShowCells(this.BreadthFirstFromStart());
+        }
+
+        private IEnumerable<Cell> BreadthFirstFromStart()
+        {
             var random = new Random();
 
-            var cellsToShow = new Queue<Cell>();
-            cellsToShow.Enqueue(this.Maze.Start);
+            var cells = new Queue<Cell>();
+            cells.Enqueue(this.Maze.Start);
 
-            int i = 0;
-            while (cellsToShow.Count > 0)
+            var result = new List<Cell>(this.Maze.Cells.Length);
+
+            while (cells.Count > 0)
             {
-                if (i++ % 10 == 0)
-                {
-                    this.StateHasChanged();
-                    await Task.Delay(10);
-                }
+                var currentCell = cells.Dequeue();
 
-                var currentCell = cellsToShow.Dequeue();
-
-                this.VisibleCells.Add(currentCell);
+                result.Add(currentCell);
 
                 var nextCells = new List<Cell>();
                 nextCells.AddIfNotNull(this.Maze.GetUpperCell(currentCell));
@@ -224,11 +224,30 @@ namespace Darkness.Pages
                 nextCells.AddIfNotNull(this.Maze.GetCellToRight(currentCell));
                 nextCells.Shuffle(random);
 
-                foreach (var cell in nextCells.Where(c => !this.VisibleCells.Contains(c)))
+                foreach (var cell in nextCells.Where(c => !result.Contains(c)))
                 {
-                    cellsToShow.Enqueue(cell);
+                    cells.Enqueue(cell);
                 }
             }
+
+            return result;
+        }
+
+        private async Task ShowCells(IEnumerable<Cell> cells)
+        {
+            int i = 0;
+            foreach (var cell in cells)
+            {
+                this.VisibleCells.Add(cell);
+
+                if (i++ % 5 == 0)
+                {
+                    this.StateHasChanged();
+                    await Task.Delay(5);
+                }
+            }
+
+            this.StateHasChanged();
         }
     }
 }
