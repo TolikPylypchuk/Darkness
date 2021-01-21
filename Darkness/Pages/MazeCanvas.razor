@@ -1,5 +1,5 @@
 <div class="d-flex flex-column align-self-stretch w-100">
-    <div class="d-flex flex-row justify-space-between pa-4 w-100">
+    <div class="d-flex flex-row justify-space-between pa-4 w-100 align-center">
         <div class="row-side">
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
                        @onclick="this.BackToMainMenu">
@@ -9,7 +9,13 @@
 
         <MudText Typo="Typo.h5">Darkness</MudText>
 
-        <div class="row-side"></div>
+        <div class="row-side d-flex flex-row justify-space-between">
+            @if (this.IsLoaded)
+            {
+                <div></div>
+                <MudText Typo="Typo.body1">@this.TimerText</MudText>
+            }
+        </div>
     </div>
 
     <div @ref="this.MazeWrapper" @onkeydown="this.OnKeyDown" tabindex="0"

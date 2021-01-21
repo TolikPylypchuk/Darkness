@@ -54,6 +54,10 @@ namespace Darkness.Pages
         private double CellWidth { get; set; }
         private double CellHeight { get; set; }
 
+        private Timer? Timer { get; set; }
+        private TimeSpan Time { get; set; }
+        private string TimerText => this.Time.ToString(@"hh\:mm\:ss");
+
         public void CancelIfGeneratingMaze()
         {
             this.MazeGenerationTokenSource.Cancel();
@@ -95,12 +99,25 @@ namespace Darkness.Pages
 
                 this.RecalculateVisiblities();
 
+                this.StartTimer();
+
                 this.IsLoaded = true;
                 this.StateHasChanged();
 
                 await this.MazeWrapper.FocusAsync();
             } catch (TaskCanceledException)
             { }
+        }
+
+        private void StartTimer()
+        {
+            void IncrementTime()
+            {
+                this.Time += TimeSpan.FromSeconds(1);
+                this.StateHasChanged();
+            }
+
+            this.Timer = new(_ => IncrementTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
 
         private async Task BackToMainMenu()
@@ -195,6 +212,11 @@ namespace Darkness.Pages
             this.IsFinished = true;
 
             this.Snackbar.Add("You won!", Severity.Success);
+
+            if (this.Timer != null)
+            {
+                await this.Timer.DisposeAsync();
+            }
 
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
