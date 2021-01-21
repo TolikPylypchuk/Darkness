@@ -1,5 +1,5 @@
 <div class="d-flex flex-column align-self-stretch w-100">
-    <div class="d-flex flex-row justify-space-between pa-4 w-100 align-center">
+    <div class="d-flex flex-row justify-space-between px-4 py-2 w-100 align-center">
         <div class="row-side">
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
                        @onclick="this.BackToMainMenu">
@@ -13,7 +13,11 @@
             @if (this.IsLoaded)
             {
                 <div></div>
-                <MudText Typo="Typo.body1">@this.TimerText</MudText>
+                <div class="d-flex flex-row align-center">
+                    <MudText Typo="Typo.body1" Class="ma-2">@this.TimerText</MudText>
+                    <MudIconButton Icon="@Icons.Material.Info" Color="Color.Secondary" Size="Size.Large"
+                                   @onclick="this.ShowInfoDialog" />
+                </div>
             }
         </div>
     </div>

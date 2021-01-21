@@ -33,6 +33,9 @@ namespace Darkness.Pages
         [Inject]
         private ISnackbar Snackbar { get; set; } = null!;
 
+        [Inject]
+        private IDialogService Dialog { get; set; } = null!;
+
         private ElementReference MazeWrapper { get; set; }
 
         private bool IsLoaded { get; set; } = false;
@@ -125,6 +128,9 @@ namespace Darkness.Pages
             this.CancelIfGeneratingMaze();
             await this.OnBackToMainMenuCallback.InvokeAsync();
         }
+
+        private void ShowInfoDialog() =>
+            this.Dialog.Show<InfoDialog>("How to Play");
 
         private void RecalculateVisiblities()
         {
@@ -220,6 +226,8 @@ namespace Darkness.Pages
 
             this.VisibleCells.Clear();
             this.PartiallyVisibleCells.Clear();
+
+            this.VisibleCells.Add(this.Maze.Finish);
 
             await this.ShowCells(this.BreadthFirstFromStart());
         }
