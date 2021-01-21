@@ -129,8 +129,12 @@ namespace Darkness.Pages
             await this.OnBackToMainMenuCallback.InvokeAsync();
         }
 
-        private void ShowInfoDialog() =>
-            this.Dialog.Show<InfoDialog>("How to Play");
+        private async Task ShowInfoDialog()
+        {
+            var dialog = this.Dialog.Show<InfoDialog>("How to Play");
+            await dialog.Result;
+            await this.MazeWrapper.FocusAsync();
+        }
 
         private void RecalculateVisiblities()
         {
