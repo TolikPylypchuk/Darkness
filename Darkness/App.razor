@@ -9,10 +9,10 @@
         @switch (this.CurrentPage)
         {
             case Page.MainMenu:
-                <MainMenu OnPlayCallback="this.OpenMazeCanvas" OnSettingsCallback="this.OpenSettings" />
+                <MainMenu OnPlayCallback="this.OpenMazePage" OnSettingsCallback="this.OpenSettings" />
                 break;
-            case Page.MazeCanvas:
-                <MazeCanvas @ref="this.MazeCanvas" OnBackToMainMenuCallback="this.OpenMainMenu" />
+            case Page.MazePage:
+                <MazePage @ref="this.MazePage" OnBackToMainMenuCallback="this.OpenMainMenu" />
                 break;
             case Page.SettingsForm:
                 <SettingsForm OnBackToMainMenuCallback="this.OpenMainMenu" />
@@ -30,33 +30,33 @@
     public enum Page
     {
         MainMenu,
-        MazeCanvas,
+        MazePage,
         SettingsForm
     }
 
     private Page CurrentPage { get; set; } = Page.MainMenu;
 
-    private MazeCanvas? MazeCanvas { get; set; } = null!;
+    private MazePage? MazePage { get; set; } = null!;
 
     private string CurrentPageTitle =>
         this.CurrentPage switch
         {
             Page.MainMenu => "Darkness",
-            Page.MazeCanvas => "Maze | Darkness",
+            Page.MazePage => "Maze | Darkness",
             Page.SettingsForm => "Settings | Darkness",
             _ => String.Empty
         };
 
-    private bool ShowFooter => this.CurrentPage != Page.MazeCanvas;
+    private bool ShowFooter => this.CurrentPage != Page.MazePage;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await this.History.OnPop(page =>
         {
-            if (this.CurrentPage == Page.MazeCanvas && this.MazeCanvas != null)
+            if (this.CurrentPage == Page.MazePage)
             {
-                this.MazeCanvas.CancelIfGeneratingMaze();
+                this.MazePage?.CancelIfGeneratingMaze();
             }
 
             this.CurrentPage = page;
@@ -71,9 +71,9 @@
         await this.SaveCurrentPage();
     }
 
-    private async Task OpenMazeCanvas()
+    private async Task OpenMazePage()
     {
-        this.CurrentPage = Page.MazeCanvas;
+        this.CurrentPage = Page.MazePage;
         await this.SaveCurrentPage();
     }
 

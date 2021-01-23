@@ -1,77 +1,37 @@
-<div class="d-flex flex-column align-self-stretch w-100">
-    <div class="d-flex flex-row justify-space-between px-4 py-2 w-100 align-center">
-        <div class="row-side">
-            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.ArrowBack"
-                       @onclick="this.BackToMainMenu">
-                Go Back
-            </MudButton>
+<div class="maze-wrapper"
+     style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; background-color: {Colors.Grey.Darken4}")>
+    @foreach (var cell in this.VisibleCells)
+    {
+        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
+                  Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
+                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)"
+                  RenderWalls="true" />
+    }
+
+    @foreach (var cell in this.PartiallyVisibleCells)
+    {
+        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
+                  Direction="null" IsStart="false" IsFinish="false" RenderWalls="false"  />
+    }
+
+    @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
+    {
+        <MazeCell Cell="this.Maze.Finish" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
+                  Direction="null" IsStart="false" IsFinish="true" RenderWalls="false"  />
+    }
+
+    <div class="d-flex flex-column w-100 h-100">
+        <div class="d-flex flex-row align-center justify-center w-100 h-30 front">
+            <div class="w-50 h-100" @onmouseup="() => this.Move(PlayerDirection.Up)"></div>
         </div>
 
-        <MudText Typo="Typo.h5">Darkness</MudText>
-
-        <div class="row-side d-flex flex-row justify-space-between">
-            @if (this.IsLoaded)
-            {
-                <div></div>
-                <div class="d-flex flex-row align-center">
-                    <MudText Typo="Typo.body1" Class="ma-2">@this.TimerText</MudText>
-                    <MudIconButton Icon="@Icons.Material.Info" Color="Color.Secondary" Size="Size.Large"
-                                   @onclick="this.ShowInfoDialog" />
-                </div>
-            }
+        <div class="d-flex flex-row align-center justify-space-between h-40 front">
+            <div class="w-25 h-100" @onmouseup="() => this.Move(PlayerDirection.Left)"></div>
+            <div class="w-25 h-100" @onmouseup="() => this.Move(PlayerDirection.Right)"></div>
         </div>
-    </div>
 
-    <div @ref="this.MazeWrapper" @onkeydown="this.OnKeyDown" tabindex="0"
-         class="d-flex flex-column justify-center align-center align-self-stretch flex-grow-1 w-100 pa-4 no-focus">
-        @if (this.IsLoaded)
-        {
-            <div class="maze-wrapper"
-                 style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; " +
-                         $"background-color: {Colors.Grey.Darken4}")>
-                @foreach (var cell in this.VisibleCells)
-                {
-                    <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                              Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
-                              IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)"
-                              RenderWalls="true" />
-                }
-
-                @foreach (var cell in this.PartiallyVisibleCells)
-                {
-                    <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
-                              Direction="null" IsStart="false" IsFinish="false" RenderWalls="false"  />
-                }
-
-                @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
-                {
-                    <MazeCell Cell="this.Maze.Finish" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                              Direction="null" IsStart="false" IsFinish="true" RenderWalls="false"  />
-                }
-
-                <div class="d-flex flex-column w-100 h-100">
-                    <div class="d-flex flex-row align-center justify-center w-100 h-30 front">
-                        <div class="w-50 h-100" @onmouseup="() => this.Move(PlayerDirection.Up)"></div>
-                    </div>
-
-                    <div class="d-flex flex-row align-center justify-space-between h-40 front">
-                        <div class="w-25 h-100" @onmouseup="() => this.Move(PlayerDirection.Left)"></div>
-                        <div class="w-25 h-100" @onmouseup="() => this.Move(PlayerDirection.Right)"></div>
-                    </div>
-
-                    <div class="d-flex flex-row align-center justify-center h-30 front">
-                        <div class="w-50 h-100" @onmouseup="() => this.Move(PlayerDirection.Down)"></div>
-                    </div>
-                </div>
-            </div>
-        } else
-        {
-            <div class="d-flex flex-column align-self-stretch justify-center w-100">
-                <div class="d-flex flex-column align-self-center">
-                    <MudText Typo="Typo.h3" Class="ma-4">Creating the maze...</MudText>
-                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="ma-4" />
-                </div>
-            </div>
-        }
+        <div class="d-flex flex-row align-center justify-center h-30 front">
+            <div class="w-50 h-100" @onmouseup="() => this.Move(PlayerDirection.Down)"></div>
+        </div>
     </div>
 </div>
