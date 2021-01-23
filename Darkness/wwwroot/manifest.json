@@ -1,5 +1,10 @@
 {
   "name": "Darkness",
+  "short_name": "Darkness",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "\/android-icon-36x36.png",
