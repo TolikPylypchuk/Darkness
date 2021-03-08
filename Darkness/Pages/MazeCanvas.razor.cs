@@ -174,15 +174,20 @@ namespace Darkness.Pages
 
         private async Task ShowCells(IEnumerable<Cell> cells)
         {
-            int i = 0;
+            const int showIncrement = 15;
+
+            int currentIteration = 0;
+            int showIteration = showIncrement;
+
             foreach (var cell in cells)
             {
                 this.VisibleCells.Add(cell);
 
-                if (i++ % 5 == 0)
+                if (currentIteration++ % showIteration == 0)
                 {
                     this.StateHasChanged();
-                    await Task.Delay(5);
+                    await Task.Delay(16);
+                    showIteration += showIncrement;
                 }
             }
 
