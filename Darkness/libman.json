@@ -8,7 +8,7 @@
       "destination": "wwwroot/lib/typeface-roboto/"
     },
     {
-      "library": "font-awesome@5.15.1",
+      "library": "font-awesome@5.15.2",
       "destination": "wwwroot/lib/font-awesome/"
     }
   ]
