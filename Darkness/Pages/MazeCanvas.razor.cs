@@ -28,6 +28,7 @@ namespace Darkness.Pages
 
         private HashSet<Cell> VisibleCells { get; } = new();
         private HashSet<Cell> PartiallyVisibleCells { get; } = new();
+        private HashSet<(Cell, double)> AnimatingCells { get; } = new();
 
         private double MazeWidth { get; set; }
         private double MazeHeight { get; set; }
@@ -138,10 +139,10 @@ namespace Darkness.Pages
 
             this.VisibleCells.Add(this.Maze.Finish);
 
-            await this.ShowCells(this.BreadthFirstFromStart());
+            this.ShowCells(this.BreadthFirstFromStart());
         }
 
-        private IEnumerable<Cell> BreadthFirstFromStart()
+        private List<Cell> BreadthFirstFromStart()
         {
             var random = new Random();
 
@@ -172,23 +173,14 @@ namespace Darkness.Pages
             return result;
         }
 
-        private async Task ShowCells(IEnumerable<Cell> cells)
+        private void ShowCells(ICollection<Cell> cells)
         {
-            const int showIncrement = 15;
+            double delay = 0.0;
 
-            int currentIteration = 0;
-            int showIteration = showIncrement;
-
-            foreach (var cell in cells)
+            foreach (var cell in cells.Where(cell => cell != this.Maze.Finish))
             {
-                this.VisibleCells.Add(cell);
-
-                if (currentIteration++ % showIteration == 0)
-                {
-                    this.StateHasChanged();
-                    await Task.Delay(16);
-                    showIteration += showIncrement;
-                }
+                this.AnimatingCells.Add((cell, delay));
+                delay += 0.01;
             }
 
             this.StateHasChanged();

@@ -1,5 +1,5 @@
-<div class="maze-wrapper"
-     style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; background-color: {Colors.Grey.Darken4}")>
+<div style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; background-color: {Colors.Grey.Darken4}")
+     class="maze-wrapper">
     @foreach (var cell in this.VisibleCells)
     {
         <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
@@ -11,13 +11,19 @@
     @foreach (var cell in this.PartiallyVisibleCells)
     {
         <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
-                  Direction="null" IsStart="false" IsFinish="false" RenderWalls="false"  />
+                  Direction="null" IsStart="false" IsFinish="false" RenderWalls="false" />
+    }
+
+    @foreach (var (cell, delay) in this.AnimatingCells)
+    {
+        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false" Direction="null"
+                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="false" RenderWalls="true" AnimationDelay="delay" />
     }
 
     @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
     {
         <MazeCell Cell="this.Maze.Finish" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                  Direction="null" IsStart="false" IsFinish="true" RenderWalls="false"  />
+                  Direction="null" IsStart="false" IsFinish="true" RenderWalls="false" />
     }
 
     <div class="d-flex flex-column w-100 h-100">

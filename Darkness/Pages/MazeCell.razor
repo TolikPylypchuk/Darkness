@@ -1,6 +1,6 @@
-<MudPaper Elevation="0" Square="true" Class=@((this.IsPartial ? "maze-cell-partial" : "maze-cell") + " back")
-          Style=@($"left: {this.X}%; top: {this.Y}%; width: {this.Width}%; height: {this.Height}%; " +
-                  $"background-color: {this.BackgroundColor}")>
+@using System.Text
+
+<MudPaper Elevation="0" Square="true" Class="@this.CellPaperClass" Style="@this.CellPaperStyle">
     @if (this.Icon != null)
     {
         <MudIcon Icon="@this.Icon" Color="Color.Primary"
@@ -61,6 +61,12 @@
     [Parameter]
     public bool RenderWalls { get; set; }
 
+    [Parameter]
+    public double? AnimationDelay { get; set; }
+
+    private string CellPaperClass { get; set; } = String.Empty;
+    private string CellPaperStyle { get; set; } = String.Empty;
+
     private double X { get; set; }
     private double Y { get; set; }
 
@@ -69,6 +75,12 @@
     private string WallStyle { get; } = $"background-color: {Colors.Grey.Darken3}";
 
     private string BackgroundColor { get; set; } = String.Empty;
+
+    public void AnimateAppearance(double delay)
+    {
+        this.CellPaperStyle += $" animation-delay: {delay}s;";
+        this.CellPaperClass += $" animating";
+    }
 
     protected override void OnParametersSet()
     {
@@ -89,5 +101,48 @@
         this.BackgroundColor = this.IsStart
             ? Colors.Pink.Lighten1
             : this.IsFinish ? Colors.DeepPurple.Lighten1 : Colors.Grey.Lighten2;
+
+        this.CellPaperClass = this.BuildClass();
+        this.CellPaperStyle = this.BuildStyle();
+    }
+
+    private string BuildClass()
+    {
+        const string space = " ";
+
+        var classBuilder = new StringBuilder()
+            .Append(this.IsPartial ? "maze-cell-partial" : "maze-cell")
+            .Append(space)
+            .Append("back");
+
+        if (this.AnimationDelay.HasValue)
+        {
+            classBuilder.Append(space).Append("animating");
+        }
+
+        return classBuilder.ToString();
+    }
+
+    private string BuildStyle()
+    {
+        const string space = " ";
+
+        var styleBuilder = new StringBuilder()
+            .Append($"left: {this.X}%;")
+            .Append(space)
+            .Append($"top: {this.Y}%;")
+            .Append(space)
+            .Append($"width: {this.Width}%;")
+            .Append(space)
+            .Append($"height: {this.Height}%;")
+            .Append(space)
+            .Append($"background-color: {this.BackgroundColor};");
+
+        if (this.AnimationDelay.HasValue)
+        {
+            styleBuilder.Append(space).Append($"animation-delay: {Math.Round(this.AnimationDelay.Value, 2)}s;");
+        }
+
+        return styleBuilder.ToString();
     }
 }

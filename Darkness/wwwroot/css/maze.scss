@@ -81,3 +81,18 @@
     @extend .cell-corner;
     left: 95%;
 }
+
+.animating {
+    opacity: 0;
+    animation: fadein 0.5s forwards;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
