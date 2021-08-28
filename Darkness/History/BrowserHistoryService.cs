@@ -20,6 +20,12 @@ namespace Darkness.History
             await window.History.PushState(value, title);
         }
 
+        public async ValueTask Back()
+        {
+            var window = await this.jsRuntime.Window();
+            await window.History.Back();
+        }
+
         public async ValueTask<IAsyncDisposable> OnPop(Func<T, ValueTask> callback)
         {
             var window = await this.jsRuntime.Window();
