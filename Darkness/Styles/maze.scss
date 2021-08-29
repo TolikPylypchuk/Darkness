@@ -1,6 +1,6 @@
 .maze-wrapper {
     width: calc(100vw - 60px);
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 150px);
     margin: auto;
     position: absolute;
     top: 50px;
@@ -85,6 +85,16 @@
 .animating {
     opacity: 0;
     animation: fadein 0.5s forwards;
+}
+
+.maze-controls {
+    position: absolute;
+    bottom: 0;
+    height: 50px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 @keyframes fadein {
