@@ -6,10 +6,7 @@ A maze game where you don't actually see the entire maze.
 
 The start tile is pink and on the left side, and the finish tile is purple and on the right side.
 
-If you're on a laptop, use the keyboard arrow keys to move and turn.
-
-Alternatively, you can click/tap on the maze itself to move. Click/tap on the upper part to move/turn up, on the lower
-part - down, on the left part - to the left, right part - to the right.
+Use the keyboard arrow keys to move and turn, or click/tap on the buttons below the maze.
 
 ## Settings
 
