@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
@@ -15,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Styles\app.scss" />
-    <Content Include="Styles\maze.scss" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\service-worker.js" />
   </ItemGroup>
 
@@ -29,11 +25,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0-rc.2.21480.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
     <PackageReference Include="MudBlazor" Version="5.1.5" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0-rc.2.21480.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
   <Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
@@ -43,4 +34,5 @@
   <Target Name="PreBuild" AfterTargets="ToolRestore">
     <Exec Command="dotnet tool run webcompiler -o wwwroot/css -p disable -z disable -r Styles" StandardOutputImportance="high" />
   </Target>
+
 </Project>

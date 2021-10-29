@@ -1,4 +1,3 @@
-namespace Darkness.Settings
-{
-    public sealed record GameSettings(int MazeWidth, int MazeHeight, bool AlwaysShowFinish);
-}
+namespace Darkness.Settings;
+
+public sealed record GameSettings(int MazeWidth, int MazeHeight, bool AlwaysShowFinish);

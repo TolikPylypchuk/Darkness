@@ -1,144 +1,136 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+namespace Darkness.Maze;
 
-using Darkness.Settings;
-
-namespace Darkness.Maze
+public sealed class KruskalMazeGenerator : IMazeGenerator
 {
-    public sealed class KruskalMazeGenerator : IMazeGenerator
+    private sealed record Edge(Location FirstLocation, Location SecondLocation);
+
+    public async Task<GameMaze> CreateMaze(GameSettings settings, CancellationToken cancellationToken)
     {
-        private sealed record Edge(Location FirstLocation, Location SecondLocation);
+        var random = new Random();
 
-        public async Task<GameMaze> CreateMaze(GameSettings settings, CancellationToken cancellationToken)
+        var (cells, sets) = this.InitializeCells(settings);
+
+        int numRows = cells.GetLength(0);
+        int numCols = cells.GetLength(1);
+
+        var edges = this.CreateEdges(numRows, numCols, random);
+
+        int i = 0;
+        while (edges.TryDequeue(out var edge))
         {
-            var random = new Random();
-
-            var (cells, sets) = this.InitializeCells(settings);
-
-            int numRows = cells.GetLength(0);
-            int numCols = cells.GetLength(1);
-
-            var edges = this.CreateEdges(numRows, numCols, random);
-
-            int i = 0;
-            while (edges.TryDequeue(out var edge))
+            if (i++ % 10 == 0)
             {
-                if (i++ % 10 == 0)
+                await Task.Delay(1, cancellationToken);
+            }
+
+            var firstSet = sets.Get(edge.FirstLocation);
+            var secondSet = sets.Get(edge.SecondLocation);
+
+            if (!ReferenceEquals(firstSet, secondSet))
+            {
+                var firstCell = cells.Get(edge.FirstLocation);
+                var secondCell = cells.Get(edge.SecondLocation);
+
+                var (newFirstCell, newSecondCell) = this.ConnectCells(firstCell, secondCell);
+
+                cells.Set(edge.FirstLocation, newFirstCell);
+                cells.Set(edge.SecondLocation, newSecondCell);
+
+                firstSet.Remove(firstCell);
+                secondSet.Remove(secondCell);
+
+                firstSet.Add(newFirstCell);
+                firstSet.Add(newSecondCell);
+
+                foreach (var cell in secondSet)
                 {
-                    await Task.Delay(1, cancellationToken);
+                    firstSet.Add(cell);
                 }
 
-                var firstSet = sets.Get(edge.FirstLocation);
-                var secondSet = sets.Get(edge.SecondLocation);
-
-                if (!ReferenceEquals(firstSet, secondSet))
+                for (int row = 0; row < numRows; row++)
                 {
-                    var firstCell = cells.Get(edge.FirstLocation);
-                    var secondCell = cells.Get(edge.SecondLocation);
-
-                    var (newFirstCell, newSecondCell) = this.ConnectCells(firstCell, secondCell);
-
-                    cells.Set(edge.FirstLocation, newFirstCell);
-                    cells.Set(edge.SecondLocation, newSecondCell);
-
-                    firstSet.Remove(firstCell);
-                    secondSet.Remove(secondCell);
-
-                    firstSet.Add(newFirstCell);
-                    firstSet.Add(newSecondCell);
-
-                    foreach (var cell in secondSet)
+                    for (int col = 0; col < numCols; col++)
                     {
-                        firstSet.Add(cell);
-                    }
-
-                    for (int row = 0; row < numRows; row++)
-                    {
-                        for (int col = 0; col < numCols; col++)
+                        if (ReferenceEquals(sets[row, col], secondSet))
                         {
-                            if (ReferenceEquals(sets[row, col], secondSet))
-                            {
-                                sets[row, col] = firstSet;
-                            }
+                            sets[row, col] = firstSet;
                         }
                     }
                 }
             }
-
-            var start = cells[random.Next(numRows), 0];
-            var end = cells[random.Next(numRows), numCols - 1];
-
-            return new(cells, start, end);
         }
 
-        private (Cell[,], HashSet<Cell>[,]) InitializeCells(GameSettings settings)
-        {
-            var cells = new Cell[settings.MazeHeight, settings.MazeWidth];
-            var sets = new HashSet<Cell>[settings.MazeHeight, settings.MazeWidth];
+        var start = cells[random.Next(numRows), 0];
+        var end = cells[random.Next(numRows), numCols - 1];
 
-            for (int row = 0; row < settings.MazeHeight; row++)
+        return new(cells, start, end);
+    }
+
+    private (Cell[,], HashSet<Cell>[,]) InitializeCells(GameSettings settings)
+    {
+        var cells = new Cell[settings.MazeHeight, settings.MazeWidth];
+        var sets = new HashSet<Cell>[settings.MazeHeight, settings.MazeWidth];
+
+        for (int row = 0; row < settings.MazeHeight; row++)
+        {
+            for (int col = 0; col < settings.MazeWidth; col++)
             {
-                for (int col = 0; col < settings.MazeWidth; col++)
+                var cell = Cell.Closed(new(row, col));
+                cells[row, col] = cell;
+                sets[row, col] = new HashSet<Cell> { cell };
+            }
+        }
+
+        return (cells, sets);
+    }
+
+    private Queue<Edge> CreateEdges(int numRows, int numCols, Random random)
+    {
+        var edges = new List<Edge>();
+
+        for (int row = 0; row < numRows; row++)
+        {
+            for (int col = 0; col < numCols; col++)
+            {
+                if (row > 0)
                 {
-                    var cell = Cell.Closed(new(row, col));
-                    cells[row, col] = cell;
-                    sets[row, col] = new HashSet<Cell> { cell };
+                    edges.Add(new(new(row, col), new(row - 1, col)));
+                }
+
+                if (col > 0)
+                {
+                    edges.Add(new(new(row, col), new(row, col - 1)));
                 }
             }
-
-            return (cells, sets);
         }
 
-        private Queue<Edge> CreateEdges(int numRows, int numCols, Random random)
+        edges.Shuffle(random);
+
+        return new(edges);
+    }
+
+    private (Cell, Cell) ConnectCells(Cell firstCell, Cell secondCell)
+    {
+        var firstLocation = firstCell.Location;
+        var secondLocation = secondCell.Location;
+
+        if (firstLocation.Row == secondLocation.Row && firstLocation.Column + 1 == secondLocation.Column)
         {
-            var edges = new List<Edge>();
-
-            for (int row = 0; row < numRows; row++)
-            {
-                for (int col = 0; col < numCols; col++)
-                {
-                    if (row > 0)
-                    {
-                        edges.Add(new(new(row, col), new(row - 1, col)));
-                    }
-
-                    if (col > 0)
-                    {
-                        edges.Add(new(new(row, col), new(row, col - 1)));
-                    }
-                }
-            }
-
-            edges.Shuffle(random);
-
-            return new(edges);
-        }
-
-        private (Cell, Cell) ConnectCells(Cell firstCell, Cell secondCell)
+            return (firstCell with { Right = CellSide.Passage }, secondCell with { Left = CellSide.Passage });
+        } else if (firstLocation.Row == secondLocation.Row && firstLocation.Column == secondLocation.Column + 1)
         {
-            var firstLocation = firstCell.Location;
-            var secondLocation = secondCell.Location;
-
-            if (firstLocation.Row == secondLocation.Row && firstLocation.Column + 1 == secondLocation.Column)
-            {
-                return (firstCell with { Right = CellSide.Passage }, secondCell with { Left = CellSide.Passage });
-            } else if (firstLocation.Row == secondLocation.Row && firstLocation.Column == secondLocation.Column + 1)
-            {
-                return (firstCell with { Left = CellSide.Passage }, secondCell with { Right = CellSide.Passage });
-            } else if (firstLocation.Row == secondLocation.Row + 1 && firstLocation.Column == secondLocation.Column)
-            {
-                return (firstCell with { Top = CellSide.Passage }, secondCell with { Bottom = CellSide.Passage });
-            } else if (firstLocation.Row + 1 == secondLocation.Row && firstLocation.Column == secondLocation.Column)
-            {
-                return (firstCell with { Bottom = CellSide.Passage }, secondCell with { Top = CellSide.Passage });
-            } else
-            {
-                throw new ArgumentException(
-                    $"Cells ({firstLocation.Column}, {firstLocation.Row}) and " +
-                    $"({secondLocation.Column}, {secondLocation.Row}) are not adjacent");
-            }
+            return (firstCell with { Left = CellSide.Passage }, secondCell with { Right = CellSide.Passage });
+        } else if (firstLocation.Row == secondLocation.Row + 1 && firstLocation.Column == secondLocation.Column)
+        {
+            return (firstCell with { Top = CellSide.Passage }, secondCell with { Bottom = CellSide.Passage });
+        } else if (firstLocation.Row + 1 == secondLocation.Row && firstLocation.Column == secondLocation.Column)
+        {
+            return (firstCell with { Bottom = CellSide.Passage }, secondCell with { Top = CellSide.Passage });
+        } else
+        {
+            throw new ArgumentException(
+                $"Cells ({firstLocation.Column}, {firstLocation.Row}) and " +
+                $"({secondLocation.Column}, {secondLocation.Row}) are not adjacent");
         }
     }
 }
