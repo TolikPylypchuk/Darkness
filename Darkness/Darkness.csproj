@@ -4,7 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorEnableCompression>false</BlazorEnableCompression>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GHPagesInjectBrotliLoader>false</GHPagesInjectBrotliLoader>
     <GHPagesBase>/</GHPagesBase>
   </PropertyGroup>
 
