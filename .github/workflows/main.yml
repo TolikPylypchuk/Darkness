@@ -26,9 +26,7 @@ jobs:
     - name: Publish
       shell: bash
       run: |
-        dotnet publish --configuration Release --output build
-        mv build/wwwroot/published-gitignore build/wwwroot/.gitignore
-        mv build/wwwroot/published-gitattributes build/wwwroot/.gitattributes
+        dotnet publish --configuration Release --output build -p:GHPages=true
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3.8.0
