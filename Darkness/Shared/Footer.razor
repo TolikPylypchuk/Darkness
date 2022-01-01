@@ -14,19 +14,8 @@
             </MudText>
         </div>
         <MudText class="flex-md-column align-self-md-center">
-            &copy; @this.CopyrightYears Anatoliy Pylypchuk.
+            &copy; 2020 Anatoliy Pylypchuk.
             <MudLink Href="https://github.com/TolikPylypchuk/Darkness" Target="_blank">Source code</MudLink>
         </MudText>
     </div>
 </footer>
-
-@code {
-
-    private readonly int CopyrightStart = 2020;
-    private readonly int CurrentYear = DateTime.UtcNow.Year;
-
-    private string CopyrightYears =>
-        this.CopyrightStart == this.CurrentYear
-            ? this.CurrentYear.ToString()
-            : $"{this.CopyrightStart}-{this.CurrentYear}";
-}
