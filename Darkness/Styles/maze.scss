@@ -1,12 +1,8 @@
 .maze-wrapper {
-    width: calc(100vw - 60px);
-    max-height: calc(100vh - 150px);
+    width: calc(100% - 50px);
+    max-height: calc(100% - 100px);
     margin: auto;
-    position: absolute;
-    top: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
 }
 
 .maze-cell {

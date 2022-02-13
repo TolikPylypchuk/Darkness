@@ -1,4 +1,4 @@
-<div style=@($"max-width: {this.MazeWidth}vh; height: {this.MazeHeight}vw; background-color: {Colors.Grey.Darken4}")
+<div style=@($"aspect-ratio: {this.MazeWidth} / {this.MazeHeight}; background-color: {Colors.Grey.Darken4}")
      class="maze-wrapper">
     @foreach (var cell in this.VisibleCells)
     {

@@ -53,14 +53,11 @@ public partial class MazeCanvas : ComponentBase
             return;
         }
 
-        double mazeWidth = this.Settings.MazeWidth;
-        double mazeHeight = this.Settings.MazeHeight;
+        this.MazeWidth = this.Settings.MazeWidth;
+        this.MazeHeight = this.Settings.MazeHeight;
 
-        this.MazeWidth = mazeWidth / mazeHeight * 100;
-        this.MazeHeight = mazeHeight / mazeWidth * 100;
-
-        this.CellWidth = 1.0 / mazeWidth * 100;
-        this.CellHeight = 1.0 / mazeHeight * 100;
+        this.CellWidth = 1.0 / this.MazeWidth * 100;
+        this.CellHeight = 1.0 / this.MazeHeight * 100;
 
         this.CurrentCell = this.Maze.Start;
         this.RecalculateVisiblities();
