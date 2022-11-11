@@ -27,20 +27,20 @@
     }
 </div>
 
-<div class="maze-controls d-flex flex-row justify-content-center align-center">
+<div class="maze-controls d-flex mb-1">
     <div @onmouseup="() => this.Move(PlayerDirection.Up)" class="cursor-pointer">
-        <i class="fas fa-3x fa-chevron-circle-up h-100" aria-label="up"></i>
+        <i class="fa-solid fa-3x fa-circle-chevron-up h-100" aria-label="up"></i>
     </div>
 
     <div @onmouseup="() => this.Move(PlayerDirection.Down)" class="cursor-pointer mx-4">
-        <i class="fas fa-3x fa-chevron-circle-down h-100" aria-label="down"></i>
+        <i class="fa-solid fa-3x fa-circle-chevron-down h-100" aria-label="down"></i>
     </div>
 
     <div @onmouseup="() => this.Move(PlayerDirection.Left)" class="cursor-pointer mx-4">
-        <i class="fas fa-3x fa-chevron-circle-left h-100" aria-label="left"></i>
+        <i class="fa-solid fa-3x fa-circle-chevron-left h-100" aria-label="left"></i>
     </div>
 
     <div @onmouseup="() => this.Move(PlayerDirection.Right)" class="cursor-pointer">
-        <i class="fas fa-3x fa-chevron-circle-right h-100" aria-label="right"></i>
+        <i class="fa-solid fa-3x fa-circle-chevron-right h-100" aria-label="right"></i>
     </div>
 </div>
