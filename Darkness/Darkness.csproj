@@ -30,16 +30,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-    <PackageReference Include="MudBlazor" Version="6.1.7" />
+    <PackageReference Include="MudBlazor" Version="6.1.8" />
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="2.0.2" />
   </ItemGroup>
-
-  <Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
-    <Exec Command="dotnet tool restore" StandardOutputImportance="high" />
-  </Target>
-
-  <Target Name="PreBuild" AfterTargets="ToolRestore">
-    <Exec Command="dotnet tool run webcompiler -o wwwroot/css -p disable -z disable -r Styles" StandardOutputImportance="high" />
-  </Target>
 
 </Project>

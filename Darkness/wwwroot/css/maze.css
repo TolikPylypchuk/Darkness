@@ -11,7 +11,7 @@
 }
 
 .maze-cell-partial {
-    @extend .maze-cell;
+    position: absolute;
     opacity: 0.35;
 }
 
@@ -20,62 +20,82 @@
 }
 
 .cell-wall-h {
-    @extend .cell-wall;
+    position: absolute;
     width: 90%;
     height: 5%;
     left: 5%;
 }
 
 .cell-wall-top {
-    @extend .cell-wall-h;
+    position: absolute;
+    width: 90%;
+    height: 5%;
+    left: 5%;
     top: 0%;
 }
 
 .cell-wall-bottom {
-    @extend .cell-wall-h;
+    position: absolute;
+    width: 90%;
+    height: 5%;
+    left: 5%;
     top: 95%;
 }
 
 .cell-wall-v {
-    @extend .cell-wall;
+    position: absolute;
     width: 5%;
     height: 90%;
-    top: 5%
+    top: 5%;
 }
 
 .cell-wall-left {
-    @extend .cell-wall-v;
+    position: absolute;
+    width: 5%;
+    height: 90%;
+    top: 5%;
     left: 0%;
 }
 
 .cell-wall-right {
-    @extend .cell-wall-v;
+    position: absolute;
+    width: 5%;
+    height: 90%;
+    top: 5%;
     left: 95%;
 }
 
 .cell-corner {
-    @extend .cell-wall;
+    position: absolute;
     width: 5%;
     height: 5%;
 }
 
 .cell-corner-top {
-    @extend .cell-corner;
+    position: absolute;
+    width: 5%;
+    height: 5%;
     top: 0%;
 }
 
 .cell-corner-bottom {
-    @extend .cell-corner;
+    position: absolute;
+    width: 5%;
+    height: 5%;
     top: 95%;
 }
 
 .cell-corner-left {
-    @extend .cell-corner;
+    position: absolute;
+    width: 5%;
+    height: 5%;
     left: 0%;
 }
 
 .cell-corner-right {
-    @extend .cell-corner;
+    position: absolute;
+    width: 5%;
+    height: 5%;
     left: 95%;
 }
 

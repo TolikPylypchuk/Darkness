@@ -20,7 +20,6 @@ bld/
 [Ll]og/
 
 # WWW Root Folder
-**/wwwroot/css/
 **/wwwroot/lib/
 
 # Visual Studio and Visual Studio Code cache/options directory
