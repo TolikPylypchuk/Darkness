@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
     <meta name="theme-color" content="#FFFFFF" />
@@ -13,7 +13,6 @@
 
     <base href="/" />
 
-    <link href="lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="lib/typeface-roboto/index.css" rel="stylesheet" />
 
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
@@ -42,11 +41,17 @@
 <body class="h-100">
     <div id="app" class="h-100">
         <div class="d-flex justify-center align-center h-100">
-            <span class="cogs" aria-label="loading">
-                <i class="fa-solid fa-gear fa-4x fa-spin" data-fa-transform="down-5 right-5"></i>
-                <i class="fa-solid fa-gear fa-3x fa-spin" data-fa-transform="down-17 right-3"></i>
-                <i class="fa-solid fa-gear fa-5x fa-spin" data-fa-transform="left-7"></i>
-            </span>
+            <div class="lds-grid" alia-label="Loading">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
     </div>
 
@@ -55,8 +60,6 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-
-    <script src="lib/font-awesome/js/all.min.js"></script>
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
