@@ -22,13 +22,6 @@ jobs:
       run: |
         dotnet publish --configuration Release --output build -p:GHPages=true
 
-    - name: Enable routing
-      shell: bash
-      run: |
-        cd build/wwwroot
-        cp index.html maze.html
-        cp index.html settings.html
-
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
