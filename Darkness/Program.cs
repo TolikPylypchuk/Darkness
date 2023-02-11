@@ -12,7 +12,6 @@ builder.Services
     .AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
     .AddScoped<IMazeGenerator, KruskalMazeGenerator>()
     .AddScoped<ISettingsService, LocalStorageSettingsService>()
-    .AddScoped(typeof(IHistoryService<>), typeof(BrowserHistoryService<>))
     .AddMudServices(config => ConfigureSnackbar(config.SnackbarConfiguration));
 
 static void ConfigureSnackbar(SnackbarConfiguration config)

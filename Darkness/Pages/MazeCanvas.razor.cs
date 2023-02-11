@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Components;
 public partial class MazeCanvas : ComponentBase
 {
     [Parameter]
-    public GameSettings Settings { get; set; } = null!;
+    public required GameSettings Settings { get; set; }
 
     [Parameter]
-    public GameMaze Maze { get; set; } = null!;
+    public required GameMaze Maze { get; set; }
 
     [Parameter]
-    public EventCallback Finished { get; set; }
+    public required EventCallback Finished { get; set; }
 
     private Cell CurrentCell { get; set; } = null!;
     private PlayerDirection CurrentDirection { get; set; } = PlayerDirection.Right;

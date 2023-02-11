@@ -1,3 +1,8 @@
+@page "/"
+@page "/index.html"
+
+@inject NavigationManager NavigationManager
+
 <div class="d-flex flex-column justify-center align-center">
     <MudText Typo="Typo.h1" Align="Align.Center">Darkness</MudText>
 
@@ -5,21 +10,21 @@
 
     <div class="d-flex justify-between align-content-stretch">
         <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   Color="Color.Primary" @onclick="this.OnPlayCallback">
+                   Color="Color.Primary" @onclick="this.OnPlay">
             Play
         </MudButton>
 
         <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   @onclick="this.OnSettingsCallback">
+                   @onclick="this.OnSettings">
             Settings
         </MudButton>
     </div>
 </div>
 
 @code {
-    [Parameter]
-    public EventCallback OnPlayCallback { get; set; }
+    private void OnPlay() =>
+        this.NavigationManager.NavigateTo("/maze");
 
-    [Parameter]
-    public EventCallback OnSettingsCallback { get; set; }
+    private void OnSettings() =>
+        this.NavigationManager.NavigateTo("/settings");
 }

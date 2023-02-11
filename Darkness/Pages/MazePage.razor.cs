@@ -12,20 +12,20 @@ public partial class MazePage : ComponentBase
     public const string ArrowUp = "ArrowUp";
     public const string ArrowDown = "ArrowDown";
 
-    [Parameter]
-    public EventCallback OnBackToMainMenuCallback { get; set; }
+    [Inject]
+    public required NavigationManager NavigationManager { get; init; }
 
     [Inject]
-    private ISettingsService SettingsService { get; set; } = null!;
+    public required ISettingsService SettingsService { get; init; }
 
     [Inject]
-    private IMazeGenerator MazeGenerator { get; set; } = null!;
+    public required IMazeGenerator MazeGenerator { get; init; }
 
     [Inject]
-    private ISnackbar Snackbar { get; set; } = null!;
+    public required ISnackbar Snackbar { get; init; }
 
     [Inject]
-    private IDialogService Dialog { get; set; } = null!;
+    public required IDialogService Dialog { get; set; }
 
     private MazeCanvas? MazeCanvas { get; set; }
     private ElementReference MazeWrapper { get; set; }
@@ -83,10 +83,10 @@ public partial class MazePage : ComponentBase
         this.Timer = new(_ => IncrementTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
-    private async Task BackToMainMenu()
+    private void BackToMainMenu()
     {
         this.CancelIfGeneratingMaze();
-        await this.OnBackToMainMenuCallback.InvokeAsync();
+        this.NavigationManager.NavigateTo("/");
     }
 
     private async Task ShowInfoDialog()

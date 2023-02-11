@@ -1,4 +1,10 @@
+@page "/settings"
+@page "/settings.html"
+
 @inject ISettingsService SettingsService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Settings | Darkness</PageTitle>
 
 <div class="d-flex flex-column justify-center align-center">
     <MudText Typo="Typo.h2" Class="ma-4">Settings</MudText>
@@ -38,7 +44,7 @@
                 Cancel
             </MudButton>
         </div>
-        
+
         <MudButton Class="my-4 mx-2" Variant="Variant.Filled" DisableElevation="true" @onclick="this.Reset">
             Reset
         </MudButton>
@@ -46,9 +52,6 @@
 </div>
 
 @code {
-    [Parameter]
-    public EventCallback OnBackToMainMenuCallback { get; set; }
-
     private int MazeWidth { get; set; }
     private int MazeHeight { get; set; }
     private bool AlwaysShowFinish { get; set; }
@@ -62,11 +65,11 @@
     private async Task Save()
     {
         await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight, this.AlwaysShowFinish));
-        await this.OnBackToMainMenuCallback.InvokeAsync();
+        this.NavigationManager.NavigateTo("/");
     }
 
-    private async Task Cancel() =>
-        await this.OnBackToMainMenuCallback.InvokeAsync();
+    private void Cancel() =>
+        this.NavigationManager.NavigateTo("/");
 
     private async Task Reset() =>
         this.InitializeFields(await this.SettingsService.GetDefaultSettings());
