@@ -28,7 +28,7 @@
         </MudGrid>
     </MudForm>
 
-    <div class="d-flex flex-row justify-space-between w-100">
+    <div class="d-flex flex-row justify-space-between my-2 w-100">
         <div class="d-flex flex-row">
             <MudButton Class="my-4 mx-2" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
                        @onclick="this.Save">
@@ -46,7 +46,6 @@
 </div>
 
 @code {
-
     [Parameter]
     public EventCallback OnBackToMainMenuCallback { get; set; }
 

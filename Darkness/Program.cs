@@ -13,13 +13,14 @@ builder.Services
     .AddScoped<IMazeGenerator, KruskalMazeGenerator>()
     .AddScoped<ISettingsService, LocalStorageSettingsService>()
     .AddScoped(typeof(IHistoryService<>), typeof(BrowserHistoryService<>))
-    .AddMudServices(config =>
-    {
-        config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomCenter;
+    .AddMudServices(config => ConfigureSnackbar(config.SnackbarConfiguration));
 
-        config.SnackbarConfiguration.VisibleStateDuration = 10000;
-        config.SnackbarConfiguration.HideTransitionDuration = 500;
-        config.SnackbarConfiguration.ShowTransitionDuration = 500;
-    });
+static void ConfigureSnackbar(SnackbarConfiguration config)
+{
+    config.PositionClass = Defaults.Classes.Position.BottomCenter;
+    config.VisibleStateDuration = 10000;
+    config.HideTransitionDuration = 500;
+    config.ShowTransitionDuration = 500;
+}
 
 await builder.Build().RunAsync();

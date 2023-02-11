@@ -28,19 +28,23 @@
 </div>
 
 <div class="maze-controls d-flex mb-1">
-    <div @onmouseup="() => this.Move(PlayerDirection.Up)" class="cursor-pointer">
-        <i class="fa-solid fa-3x fa-circle-chevron-up h-100" aria-label="up"></i>
-    </div>
+    <MudButton Variant="@Variant.Text" OnClick="() => this.Move(PlayerDirection.Up)" DisableElevation="true"
+               DisableRipple="true" aria-label="Up">
+        <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowUp" Size="@Size.Large" />
+    </MudButton>
 
-    <div @onmouseup="() => this.Move(PlayerDirection.Down)" class="cursor-pointer mx-4">
-        <i class="fa-solid fa-3x fa-circle-chevron-down h-100" aria-label="down"></i>
-    </div>
+    <MudButton Variant="@Variant.Text" OnClick="() => this.Move(PlayerDirection.Down)" DisableElevation="true"
+               DisableRipple="true" aria-label="Down">
+        <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowDown" Size="@Size.Large" />
+    </MudButton>
 
-    <div @onmouseup="() => this.Move(PlayerDirection.Left)" class="cursor-pointer mx-4">
-        <i class="fa-solid fa-3x fa-circle-chevron-left h-100" aria-label="left"></i>
-    </div>
+    <MudButton Variant="@Variant.Text" OnClick="() => this.Move(PlayerDirection.Left)" DisableElevation="true"
+               DisableRipple="true" aria-label="Left">
+        <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowLeft" Size="@Size.Large" />
+    </MudButton>
 
-    <div @onmouseup="() => this.Move(PlayerDirection.Right)" class="cursor-pointer">
-        <i class="fa-solid fa-3x fa-circle-chevron-right h-100" aria-label="right"></i>
-    </div>
+    <MudButton Variant="@Variant.Text" OnClick="() => this.Move(PlayerDirection.Right)" DisableElevation="true"
+               DisableRipple="true" aria-label="Right">
+        <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowRight" Size="@Size.Large" />
+    </MudButton>
 </div>
