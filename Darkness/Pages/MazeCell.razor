@@ -76,12 +76,6 @@
 
     private string BackgroundColor { get; set; } = String.Empty;
 
-    public void AnimateAppearance(double delay)
-    {
-        this.CellPaperStyle += $" animation-delay: {delay}s;";
-        this.CellPaperClass += $" animating";
-    }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();

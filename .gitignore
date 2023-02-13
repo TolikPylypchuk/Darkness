@@ -22,10 +22,11 @@ bld/
 # WWW Root Folder
 **/wwwroot/lib/
 
-# Visual Studio and Visual Studio Code cache/options directory
+# Visual Studio, Visual Studio Code, and Rider cache/options directory
 .vs/
 .vscode/
 .ionide/
+.idea/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

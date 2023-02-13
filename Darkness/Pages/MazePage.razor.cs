@@ -7,10 +7,10 @@ using MudBlazor;
 
 public partial class MazePage : ComponentBase
 {
-    public const string ArrowLeft = "ArrowLeft";
-    public const string ArrowRight = "ArrowRight";
-    public const string ArrowUp = "ArrowUp";
-    public const string ArrowDown = "ArrowDown";
+    private const string ArrowLeft = "ArrowLeft";
+    private const string ArrowRight = "ArrowRight";
+    private const string ArrowUp = "ArrowUp";
+    private const string ArrowDown = "ArrowDown";
 
     [Inject]
     public required NavigationManager NavigationManager { get; init; }
@@ -30,7 +30,7 @@ public partial class MazePage : ComponentBase
     private MazeCanvas? MazeCanvas { get; set; }
     private ElementReference MazeWrapper { get; set; }
 
-    private bool IsLoaded { get; set; } = false;
+    private bool IsLoaded { get; set; }
     private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
 
     private GameSettings Settings { get; set; } = null!;
@@ -40,10 +40,8 @@ public partial class MazePage : ComponentBase
     private TimeSpan Time { get; set; }
     private string TimerText => this.Time.ToString(@"hh\:mm\:ss");
 
-    public void CancelIfGeneratingMaze()
-    {
+    private void CancelIfGeneratingMaze() =>
         this.MazeGenerationTokenSource.Cancel();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -80,7 +78,7 @@ public partial class MazePage : ComponentBase
             this.StateHasChanged();
         }
 
-        this.Timer = new(_ => IncrementTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+        this.Timer = new Timer(_ => IncrementTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
     private void BackToMainMenu()
@@ -91,7 +89,7 @@ public partial class MazePage : ComponentBase
 
     private async Task ShowInfoDialog()
     {
-        var dialog = this.Dialog.Show<InfoDialog>("How to Play");
+        var dialog = await this.Dialog.ShowAsync<InfoDialog>("How to Play");
         await dialog.Result;
         await this.MazeWrapper.FocusAsync();
     }
@@ -109,7 +107,7 @@ public partial class MazePage : ComponentBase
                 _ => null
             };
 
-            if (direction is PlayerDirection directionToMove)
+            if (direction is { } directionToMove)
             {
                 await this.MazeCanvas.Move(directionToMove);
             }

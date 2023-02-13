@@ -40,7 +40,7 @@
                        @onclick="this.Save">
                 Save
             </MudButton>
-            <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" @onclick="this.Cancel">
+            <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" @onclick="this.NavigateToHomePage">
                 Cancel
             </MudButton>
         </div>
@@ -65,10 +65,10 @@
     private async Task Save()
     {
         await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight, this.AlwaysShowFinish));
-        this.NavigationManager.NavigateTo("/");
+        this.NavigateToHomePage();
     }
 
-    private void Cancel() =>
+    private void NavigateToHomePage() =>
         this.NavigationManager.NavigateTo("/");
 
     private async Task Reset() =>

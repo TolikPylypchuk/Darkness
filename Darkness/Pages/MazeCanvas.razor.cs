@@ -60,10 +60,10 @@ public partial class MazeCanvas : ComponentBase
         this.CellHeight = 1.0 / this.MazeHeight * 100;
 
         this.CurrentCell = this.Maze.Start;
-        this.RecalculateVisiblities();
+        this.RecalculateVisibilities();
     }
 
-    private void RecalculateVisiblities()
+    private void RecalculateVisibilities()
     {
         this.VisibleCells.Clear();
         this.PartiallyVisibleCells.Clear();
@@ -114,7 +114,7 @@ public partial class MazeCanvas : ComponentBase
     private void Turn(PlayerDirection direction)
     {
         this.CurrentDirection = direction;
-        this.RecalculateVisiblities();
+        this.RecalculateVisibilities();
     }
 
     private async Task Finish()
