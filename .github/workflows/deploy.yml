@@ -20,7 +20,7 @@ jobs:
     - name: Publish
       shell: bash
       run: |
-        dotnet publish --configuration Release --output build -p:GHPages=true
+        dotnet publish --configuration Release -p:PublishDir=build -p:GHPages=true
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
