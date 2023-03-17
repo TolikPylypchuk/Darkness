@@ -3,18 +3,18 @@
 
 @inject NavigationManager NavigationManager
 
-<div class="d-flex flex-column justify-center align-center">
+<div class="container">
     <MudText Typo="Typo.h1" Align="Align.Center">Darkness</MudText>
 
-    <MudText Align="Align.Center" Class="ma-2">A maze game where you don't actually see the entire maze</MudText>
+    <MudText Align="Align.Center" Class="subtitle">A maze game where you don't actually see the entire maze</MudText>
 
-    <div class="d-flex justify-between align-content-stretch">
-        <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   Color="Color.Primary" @onclick="this.OnPlay">
+    <div class="action-container">
+        <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large" Color="Color.Primary"
+                   @onclick="this.OnPlay">
             Play
         </MudButton>
 
-        <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
+        <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
                    @onclick="this.OnSettings">
             Settings
         </MudButton>

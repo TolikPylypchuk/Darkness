@@ -1,0 +1,18 @@
+.maze-container {
+  flex: 1;
+  aspect-ratio: var(--maze-width) / var(--maze-height);
+  background-color: var(--mud-palette-black);
+  display: grid;
+  grid-template-rows: repeat(var(--maze-width), 1fr);
+  grid-template-columns: repeat(var(--maze-height), 1fr);
+  place-content: stretch;
+  min-width: 0;
+  min-height: 0;
+}
+
+.maze-controls {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-4);
+  margin-block-start: var(--spacing-2);
+}

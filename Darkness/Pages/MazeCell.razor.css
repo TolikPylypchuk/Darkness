@@ -1,0 +1,64 @@
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.cell {
+  grid-row: var(--row);
+  grid-column: var(--column);
+  aspect-ratio: 1 / 1;
+  background-color: var(--background-color);
+  display: grid;
+  grid-template-rows: 5fr 90fr 5fr;
+  grid-template-columns: 5fr 90fr 5fr;
+  place-content: stretch;
+}
+
+.partial {
+  opacity: 0.35;
+}
+
+.animating {
+  opacity: 0;
+  animation: fadein 0.5s forwards;
+  animation-delay: var(--animation-delay);
+}
+
+.wall {
+  background-color: var(--mud-palette-dark);
+}
+
+.top {
+  grid-row: 1;
+}
+
+.middle {
+  grid-row: 2;
+}
+
+.bottom {
+  grid-row: 3;
+}
+
+.left {
+  grid-column: 1;
+}
+
+.center {
+  grid-column: 2;
+}
+
+.right {
+  grid-column: 3;
+}
+
+::deep .icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

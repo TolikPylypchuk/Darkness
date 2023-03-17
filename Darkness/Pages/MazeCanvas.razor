@@ -1,33 +1,30 @@
-<div style=@($"aspect-ratio: {this.MazeWidth} / {this.MazeHeight}; background-color: {Colors.Grey.Darken4}")
-     class="maze-wrapper">
+<div class="maze-container" style="@this.MazeStyle">
     @foreach (var cell in this.VisibleCells)
     {
-        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
+        <MazeCell Cell="cell" IsPartial="false" RenderWalls="true"
                   Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
-                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)"
-                  RenderWalls="true" />
+                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)" />
     }
 
     @foreach (var cell in this.PartiallyVisibleCells)
     {
-        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="true"
-                  Direction="null" IsStart="false" IsFinish="false" RenderWalls="false" />
+        <MazeCell Cell="cell" IsPartial="true" Direction="null" IsStart="false" IsFinish="false" RenderWalls="false" />
     }
 
     @foreach (var (cell, delay) in this.AnimatingCells)
     {
-        <MazeCell Cell="cell" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false" Direction="null"
-                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="false" RenderWalls="true" AnimationDelay="delay" />
+        <MazeCell Cell="cell" IsPartial="false" Direction="null" RenderWalls="true" AnimationDelay="delay"
+                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="false" />
     }
 
     @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
     {
-        <MazeCell Cell="this.Maze.Finish" Width="this.CellWidth" Height="this.CellHeight" IsPartial="false"
-                  Direction="null" IsStart="false" IsFinish="true" RenderWalls="false" />
+        <MazeCell Cell="this.Maze.Finish" IsPartial="false" Direction="null" RenderWalls="false"
+                  IsStart="false" IsFinish="true" />
     }
 </div>
 
-<div class="maze-controls d-flex mb-1">
+<div class="maze-controls">
     <MudButton Variant="@Variant.Text" OnClick="() => this.Move(PlayerDirection.Up)" DisableElevation="true"
                DisableRipple="true" aria-label="Up">
         <MudIcon Icon="@Icons.Material.Filled.KeyboardArrowUp" Size="@Size.Large" />

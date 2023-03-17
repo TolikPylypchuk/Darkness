@@ -28,7 +28,7 @@ public partial class MazePage : ComponentBase
     public required IDialogService Dialog { get; set; }
 
     private MazeCanvas? MazeCanvas { get; set; }
-    private ElementReference MazeWrapper { get; set; }
+    private ElementReference PageContainer { get; set; }
 
     private bool IsLoaded { get; set; }
     private CancellationTokenSource MazeGenerationTokenSource { get; set; } = new();
@@ -65,7 +65,7 @@ public partial class MazePage : ComponentBase
             this.IsLoaded = true;
             this.StateHasChanged();
 
-            await this.MazeWrapper.FocusAsync();
+            await this.PageContainer.FocusAsync();
         } catch (TaskCanceledException)
         { }
     }
@@ -91,12 +91,12 @@ public partial class MazePage : ComponentBase
     {
         var dialog = await this.Dialog.ShowAsync<InfoDialog>("How to Play");
         await dialog.Result;
-        await this.MazeWrapper.FocusAsync();
+        await this.PageContainer.FocusAsync();
     }
 
     private async Task OnKeyDown(KeyboardEventArgs e)
     {
-        if (this.MazeCanvas != null)
+        if (this.MazeCanvas is { } canvas)
         {
             PlayerDirection? direction = e.Key switch
             {
@@ -109,7 +109,7 @@ public partial class MazePage : ComponentBase
 
             if (direction is { } directionToMove)
             {
-                await this.MazeCanvas.Move(directionToMove);
+                await canvas.Move(directionToMove);
             }
         }
     }

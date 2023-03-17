@@ -2,22 +2,24 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="d-flex flex-column justify-stretch h-100">
+<div class="app-container">
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         </Found>
         <NotFound>
-            <div class="d-flex flex-column justify-center align-center h-100">
+            <main>
                 <MudText Typo="Typo.h1" Align="Align.Center">Darkness</MudText>
 
-                <MudText Align="Align.Center" Class="my-2">There's nothing at this address :(</MudText>
+                <MudText Align="Align.Center" Class="subtitle">There's nothing at this address :(</MudText>
 
-                <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large"
-                           Href="/" Class="ma-4">
-                    Go to the home page
-                </MudButton>
-            </div>
+                <div class="action-container">
+                    <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+                               Size="Size.Large" Href="/">
+                        Go to the home page
+                    </MudButton>
+                </div>
+            </main>
 
             <Footer />
         </NotFound>

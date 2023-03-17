@@ -6,46 +6,38 @@
 
 <PageTitle>Settings | Darkness</PageTitle>
 
-<div class="d-flex flex-column justify-center align-center">
-    <MudText Typo="Typo.h2" Class="ma-4">Settings</MudText>
+<div class="container">
+    <MudText Typo="Typo.h2" Class="title">Settings</MudText>
 
-    <MudForm>
-        <MudGrid>
-            <MudItem xs="12" sm="6">
-                <MudSelect T="int" Label="Maze Width" Strict="true" @bind-Value="this.MazeWidth" Class="ma-2">
-                    @for (int size = 10; size <= 50; size += 5)
-                    {
-                        <MudSelectItem T="int" Value="size" />
-                    }
-                </MudSelect>
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudSelect T="int" Label="Maze Height" Strict="true" @bind-Value="this.MazeHeight" Class="ma-2">
-                    @for (int size = 10; size <= 50; size += 5)
-                    {
-                        <MudSelectItem T="int" Value="size" />
-                    }
-                </MudSelect>
-            </MudItem>
-            <MudItem xs="12">
-                <MudCheckBox T="bool" Label="Always show the finish tile"
-                             @bind-Checked="this.AlwaysShowFinish" Class="ma-2" />
-            </MudItem>
-        </MudGrid>
+    <MudForm Class="settings-form">
+        <MudSelect T="int" Label="Maze Width" Strict="true" @bind-Value="this.MazeWidth">
+            @for (int size = 10; size <= 50; size += 5)
+            {
+                <MudSelectItem T="int" Value="size" />
+            }
+        </MudSelect>
+        <MudSelect T="int" Label="Maze Height" Strict="true" @bind-Value="this.MazeHeight">
+            @for (int size = 10; size <= 50; size += 5)
+            {
+                <MudSelectItem T="int" Value="size" />
+            }
+        </MudSelect>
+        <MudCheckBox T="bool" Label="Always show the finish tile" @bind-Checked="this.AlwaysShowFinish"
+                     Class="show-finish-checkbox" />
     </MudForm>
 
-    <div class="d-flex flex-row justify-space-between my-2 w-100">
-        <div class="d-flex flex-row">
-            <MudButton Class="my-4 mx-2" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+    <div class="action-container">
+        <div class="main-action-container">
+            <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
                        @onclick="this.Save">
                 Save
             </MudButton>
-            <MudButton Class="ma-4" Variant="Variant.Filled" DisableElevation="true" @onclick="this.NavigateToHomePage">
+            <MudButton Variant="Variant.Filled" DisableElevation="true" @onclick="this.NavigateToHomePage">
                 Cancel
             </MudButton>
         </div>
 
-        <MudButton Class="my-4 mx-2" Variant="Variant.Filled" DisableElevation="true" @onclick="this.Reset">
+        <MudButton Variant="Variant.Filled" DisableElevation="true" @onclick="this.Reset">
             Reset
         </MudButton>
     </div>

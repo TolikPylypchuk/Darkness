@@ -1,50 +1,43 @@
-@using System.Text
-
-<MudPaper Elevation="0" Square="true" Class="@this.CellPaperClass" Style="@this.CellPaperStyle">
+<div class="@($"cell{this.CellClass}")" style="@this.CellStyle">
     @if (this.Icon != null)
     {
-        <MudIcon Icon="@this.Icon" Color="Color.Primary"
-                 Style="width: 90%; height: 90%; top: 5%; left: 5%; position: absolute" />
+        <div class="middle center">
+            <MudIcon Icon="@this.Icon" Color="Color.Primary" Class="icon" />
+        </div>
     }
 
     @if (this.RenderWalls)
     {
-        <div class="cell-corner-top cell-corner-left" style="@this.WallStyle"></div>
-        <div class="cell-corner-top cell-corner-right" style="@this.WallStyle"></div>
-        <div class="cell-corner-bottom cell-corner-left" style="@this.WallStyle"></div>
-        <div class="cell-corner-bottom cell-corner-right" style="@this.WallStyle"></div>
+        <div class="wall top left"></div>
+        <div class="wall top right"></div>
+        <div class="wall bottom left"></div>
+        <div class="wall bottom right"></div>
 
         if (!this.Cell.Top.IsOpen())
         {
-            <div class="cell-wall-top" style="@this.WallStyle"></div>
+            <div class="wall top center"></div>
         }
 
         if (!this.Cell.Bottom.IsOpen())
         {
-            <div class="cell-wall-bottom" style="@this.WallStyle"></div>
+            <div class="wall bottom center"></div>
         }
 
         if (!this.Cell.Left.IsOpen())
         {
-            <div class="cell-wall-left" style="@this.WallStyle"></div>
+            <div class="wall middle left"></div>
         }
 
         if (!this.Cell.Right.IsOpen())
         {
-            <div class="cell-wall-right" style="@this.WallStyle"></div>
+            <div class="wall middle right"></div>
         }
     }
-</MudPaper>
+</div>
 
 @code {
     [Parameter]
     public Cell Cell { get; set; } = null!;
-
-    [Parameter]
-    public double Width { get; set; }
-
-    [Parameter]
-    public double Height { get; set; }
 
     [Parameter]
     public bool IsPartial { get; set; }
@@ -64,26 +57,22 @@
     [Parameter]
     public double? AnimationDelay { get; set; }
 
-    private string CellPaperClass { get; set; } = String.Empty;
-    private string CellPaperStyle { get; set; } = String.Empty;
-
-    private double X { get; set; }
-    private double Y { get; set; }
+    private string CellClass { get; set; } = String.Empty;
+    private string CellStyle { get; set; } = String.Empty;
 
     private string? Icon { get; set; }
-
-    private string WallStyle { get; } = $"background-color: {Colors.Grey.Darken3}";
-
-    private string BackgroundColor { get; set; } = String.Empty;
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        this.X = this.Cell.Location.Column * this.Width;
-        this.Y = this.Cell.Location.Row * this.Height;
+        this.Icon = this.DirectionToIcon();
+        this.CellClass = this.BuildClass();
+        this.CellStyle = this.BuildStyle();
+    }
 
-        this.Icon = this.Direction switch
+    private string? DirectionToIcon() =>
+        this.Direction switch
         {
             PlayerDirection.Left => Icons.Material.Filled.KeyboardArrowLeft,
             PlayerDirection.Right => Icons.Material.Filled.KeyboardArrowRight,
@@ -92,51 +81,18 @@
             _ => null
         };
 
-        this.BackgroundColor = this.IsStart
-            ? Colors.Pink.Lighten1
-            : this.IsFinish ? Colors.DeepPurple.Lighten1 : Colors.Grey.Lighten2;
-
-        this.CellPaperClass = this.BuildClass();
-        this.CellPaperStyle = this.BuildStyle();
-    }
-
-    private string BuildClass()
-    {
-        const string space = " ";
-
-        var classBuilder = new StringBuilder()
-            .Append(this.IsPartial ? "maze-cell-partial" : "maze-cell")
-            .Append(space)
-            .Append("back");
-
-        if (this.AnimationDelay.HasValue)
-        {
-            classBuilder.Append(space).Append("animating");
-        }
-
-        return classBuilder.ToString();
-    }
+    private string BuildClass() =>
+        (this.IsPartial ? " partial" : "") + (this.AnimationDelay.HasValue ? " animating" : "");
 
     private string BuildStyle()
     {
-        const string space = " ";
+        var backgroundColor = this.IsStart
+            ? "--mud-palette-secondary"
+            : this.IsFinish ? "--mud-palette-primary" : "--mud-palette-grey-lighter";
 
-        var styleBuilder = new StringBuilder()
-            .Append($"left: {this.X}%;")
-            .Append(space)
-            .Append($"top: {this.Y}%;")
-            .Append(space)
-            .Append($"width: {this.Width}%;")
-            .Append(space)
-            .Append($"height: {this.Height}%;")
-            .Append(space)
-            .Append($"background-color: {this.BackgroundColor};");
-
-        if (this.AnimationDelay.HasValue)
-        {
-            styleBuilder.Append(space).Append($"animation-delay: {Math.Round(this.AnimationDelay.Value, 2)}s;");
-        }
-
-        return styleBuilder.ToString();
+        return $"--row: {this.Cell.Location.Row + 1}; " +
+            $"--column: {this.Cell.Location.Column + 1}; " +
+            $"--background-color: var({backgroundColor});" +
+            (this.AnimationDelay.HasValue ? $" --animation-delay: {Math.Round(this.AnimationDelay.Value, 2)}s;" : "");
     }
 }

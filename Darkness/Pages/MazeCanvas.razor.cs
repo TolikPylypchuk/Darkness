@@ -22,11 +22,7 @@ public partial class MazeCanvas : ComponentBase
     private HashSet<Cell> PartiallyVisibleCells { get; } = new();
     private HashSet<(Cell, double)> AnimatingCells { get; } = new();
 
-    private double MazeWidth { get; set; }
-    private double MazeHeight { get; set; }
-
-    private double CellWidth { get; set; }
-    private double CellHeight { get; set; }
+    private string MazeStyle { get; set; } = String.Empty;
 
     public async Task Move(PlayerDirection direction)
     {
@@ -53,15 +49,13 @@ public partial class MazeCanvas : ComponentBase
             return;
         }
 
-        this.MazeWidth = this.Settings.MazeWidth;
-        this.MazeHeight = this.Settings.MazeHeight;
-
-        this.CellWidth = 1.0 / this.MazeWidth * 100;
-        this.CellHeight = 1.0 / this.MazeHeight * 100;
-
+        this.MazeStyle = this.CreateMazeStyle();
         this.CurrentCell = this.Maze.Start;
         this.RecalculateVisibilities();
     }
+
+    private string CreateMazeStyle() =>
+        $"--maze-width: {this.Settings.MazeWidth}; --maze-height: {this.Settings.MazeHeight}";
 
     private void RecalculateVisibilities()
     {
