@@ -26,7 +26,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: build/wwwroot
+        publish_dir: Darkness/build/wwwroot
         user_name: "Tolik Pylypchuk"
         user_email: "pylypchuk.tolik@gmail.com"
         commit_message: "Deploy to GitHub Pages"
