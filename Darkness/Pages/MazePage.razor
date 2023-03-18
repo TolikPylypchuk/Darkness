@@ -13,7 +13,13 @@
             </MudButton>
         </div>
 
-        <MudText Typo="Typo.h5">Darkness</MudText>
+        <div class="back-mobile">
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary"
+                           @onclick="this.BackToMainMenu" aria-label="Back" />
+            <MudText Typo="Typo.h5">Darkness</MudText>
+        </div>
+
+        <MudText Typo="Typo.h5" Class="title">Darkness</MudText>
 
         <div class="info">
             @if (this.IsLoaded)

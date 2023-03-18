@@ -1,27 +1,30 @@
-<div class="maze-container" style="@this.MazeStyle">
-    @foreach (var cell in this.VisibleCells)
-    {
-        <MazeCell Cell="cell" IsPartial="false" RenderWalls="true"
+<div class="maze-container">
+    <div class="maze" style="@this.MazeStyle">
+        @foreach (var cell in this.VisibleCells)
+        {
+            <MazeCell Cell="cell" IsPartial="false" RenderWalls="true"
                   Direction="Equals(cell, this.CurrentCell) ? this.CurrentDirection : null"
                   IsStart="Equals(cell, this.Maze.Start)" IsFinish="Equals(cell, this.Maze.Finish)" />
-    }
+        }
 
-    @foreach (var cell in this.PartiallyVisibleCells)
-    {
-        <MazeCell Cell="cell" IsPartial="true" Direction="null" IsStart="false" IsFinish="false" RenderWalls="false" />
-    }
+        @foreach (var cell in this.PartiallyVisibleCells)
+        {
+            <MazeCell Cell="cell" IsPartial="true" Direction="null" IsStart="false" IsFinish="false"
+                      RenderWalls="false" />
+        }
 
-    @foreach (var (cell, delay) in this.AnimatingCells)
-    {
-        <MazeCell Cell="cell" IsPartial="false" Direction="null" RenderWalls="true" AnimationDelay="delay"
-                  IsStart="Equals(cell, this.Maze.Start)" IsFinish="false" />
-    }
+        @foreach (var (cell, delay) in this.AnimatingCells)
+        {
+            <MazeCell Cell="cell" IsPartial="false" Direction="null" RenderWalls="true" AnimationDelay="delay"
+                      IsStart="Equals(cell, this.Maze.Start)" IsFinish="false" />
+        }
 
-    @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
-    {
-        <MazeCell Cell="this.Maze.Finish" IsPartial="false" Direction="null" RenderWalls="false"
-                  IsStart="false" IsFinish="true" />
-    }
+        @if (this.Settings.AlwaysShowFinish && !this.VisibleCells.Contains(this.Maze.Finish))
+        {
+            <MazeCell Cell="this.Maze.Finish" IsPartial="false" Direction="null" RenderWalls="false"
+                      IsStart="false" IsFinish="true" />
+        }
+    </div>
 </div>
 
 <div class="maze-controls">

@@ -20,6 +20,10 @@ nav {
   flex: 1;
 }
 
+.back-mobile {
+  display: none;
+}
+
 .info {
   flex: 1;
   display: flex;
@@ -29,7 +33,31 @@ nav {
 }
 
 ::deep .timer {
-  padding: var(--spacing-2);
+  margin-inline-end: var(--spacing-2);
+}
+
+@media (max-width: 650px) {
+  nav {
+    align-items: stretch;
+  }
+
+  .back {
+    display: none;
+  }
+
+  .back-mobile {
+    display: revert;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  ::deep .title {
+    display: none;
+  }
 }
 
 main {

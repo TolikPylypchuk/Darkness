@@ -50,5 +50,9 @@
 .main-action-container {
   display: flex;
   flex-direction: row;
-  gap: calc(var(--spacing-3) * 2);
+  gap: var(--spacing-4);
+}
+
+::deep .reset-button {
+  margin-inline-start: var(--spacing-4);
 }
