@@ -62,8 +62,15 @@ public sealed class KruskalMazeGenerator : IMazeGenerator
             }
         }
 
+        var deadEnds = this.GetDeadEndCellIndices(cells, numCols - 1);
+
+        if (deadEnds.Count == 0)
+        {
+            return await this.CreateMaze(settings, cancellationToken);
+        }
+
         var start = cells[random.Next(numRows), 0];
-        var end = cells[random.Next(numRows), numCols - 1];
+        var end = cells[deadEnds[random.Next(deadEnds.Count)], numCols - 1];
 
         return new GameMaze(cells, start, end);
     }
@@ -139,5 +146,14 @@ public sealed class KruskalMazeGenerator : IMazeGenerator
         throw new ArgumentException(
             $"Cells ({firstLocation.Column}, {firstLocation.Row}) and " +
             $"({secondLocation.Column}, {secondLocation.Row}) are not adjacent");
+    }
+
+    private List<int> GetDeadEndCellIndices(Cell[,] cells, int column)
+    {
+        int numRows = cells.GetLength(0);
+
+        return Enumerable.Range(0, numRows)
+            .Where(row => cells[row, column].NumberOfWalls() == 3)
+            .ToList();
     }
 }
