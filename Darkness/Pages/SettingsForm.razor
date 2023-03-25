@@ -1,8 +1,8 @@
 @page "/settings"
 @page "/settings.html"
 
+@inject INavigator Navigator
 @inject ISettingsService SettingsService
-@inject NavigationManager NavigationManager
 
 <PageTitle>Settings | Darkness</PageTitle>
 
@@ -57,11 +57,11 @@
     private async Task Save()
     {
         await this.SettingsService.SaveSettings(new(this.MazeWidth, this.MazeHeight, this.AlwaysShowFinish));
-        this.NavigateToHomePage();
+        await this.NavigateToHomePage();
     }
 
-    private void NavigateToHomePage() =>
-        this.NavigationManager.NavigateTo("/");
+    private async Task NavigateToHomePage() =>
+        await this.Navigator.GoToHomePage();
 
     private async Task Reset() =>
         this.InitializeFields(await this.SettingsService.GetDefaultSettings());

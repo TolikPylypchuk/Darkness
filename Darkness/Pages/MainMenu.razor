@@ -1,7 +1,7 @@
 @page "/"
 @page "/index.html"
 
-@inject NavigationManager NavigationManager
+@inject INavigator Navigator
 
 <div class="container">
     <MudText Typo="Typo.h1" Align="Align.Center">Darkness</MudText>
@@ -10,21 +10,13 @@
 
     <div class="action-container">
         <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large" Color="Color.Primary"
-                   @onclick="this.OnPlay">
+                   @onclick="async () => await this.Navigator.GoToMazePage()">
             Play
         </MudButton>
 
         <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
-                   @onclick="this.OnSettings">
+                   @onclick="async () => await this.Navigator.GoToSettingsPage()">
             Settings
         </MudButton>
     </div>
 </div>
-
-@code {
-    private void OnPlay() =>
-        this.NavigationManager.NavigateTo("/maze");
-
-    private void OnSettings() =>
-        this.NavigationManager.NavigateTo("/settings");
-}

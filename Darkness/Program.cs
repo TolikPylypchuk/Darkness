@@ -11,6 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services
     .AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
     .AddScoped<IMazeGenerator, KruskalMazeGenerator>()
+    .AddScoped<INavigator, BrowserHistoryAwareNavigator>()
     .AddScoped<ISettingsService, LocalStorageSettingsService>()
     .AddMudServices(config => ConfigureSnackbar(config.SnackbarConfiguration));
 

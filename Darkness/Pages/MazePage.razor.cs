@@ -13,7 +13,7 @@ public partial class MazePage : ComponentBase
     private const string ArrowDown = "ArrowDown";
 
     [Inject]
-    public required NavigationManager NavigationManager { get; init; }
+    public required INavigator Navigator { get; init; }
 
     [Inject]
     public required ISettingsService SettingsService { get; init; }
@@ -81,10 +81,10 @@ public partial class MazePage : ComponentBase
         this.Timer = new Timer(_ => IncrementTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
-    private void BackToMainMenu()
+    private async ValueTask BackToHomePage()
     {
         this.CancelIfGeneratingMaze();
-        this.NavigationManager.NavigateTo("/");
+        await this.Navigator.GoToHomePage();
     }
 
     private async Task ShowInfoDialog()

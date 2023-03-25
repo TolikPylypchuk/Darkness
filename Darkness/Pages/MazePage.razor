@@ -8,14 +8,14 @@
     <nav>
         <div class="back">
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.ArrowBack"
-                       @onclick="this.BackToMainMenu">
+                       @onclick="async () => await this.BackToHomePage()">
                 Go Back
             </MudButton>
         </div>
 
         <div class="back-mobile">
             <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary"
-                           @onclick="this.BackToMainMenu" aria-label="Back" />
+                           @onclick="async () => await this.BackToHomePage()" aria-label="Back" />
             <MudText Typo="Typo.h5">Darkness</MudText>
         </div>
 
