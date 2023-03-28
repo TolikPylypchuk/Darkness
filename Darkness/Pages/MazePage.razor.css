@@ -12,7 +12,8 @@ nav {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-inline: var(--spacing-4);
+  padding-inline-start: var(--spacing-4);
+  padding-inline-end: var(--spacing-1);
   padding-block: var(--spacing-2);
 }
 
