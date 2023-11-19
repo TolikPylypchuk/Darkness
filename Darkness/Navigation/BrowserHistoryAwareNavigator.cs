@@ -6,22 +6,16 @@ using BrowserInterop.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-public class BrowserHistoryAwareNavigator : INavigator
+public class BrowserHistoryAwareNavigator(NavigationManager navigationManager, IJSRuntime jsRuntime) : INavigator
 {
     private const string HomePage = "/";
     private const string MazePage = "/maze";
     private const string SettingsPage = "/settings";
 
-    private readonly NavigationManager navigationManager;
-    private readonly IJSRuntime jsRuntime;
+    private readonly NavigationManager navigationManager = navigationManager;
+    private readonly IJSRuntime jsRuntime = jsRuntime;
 
     private bool goToMainPageUsingBrowserHistory = false;
-
-    public BrowserHistoryAwareNavigator(NavigationManager navigationManager, IJSRuntime jsRuntime)
-    {
-        this.navigationManager = navigationManager;
-        this.jsRuntime = jsRuntime;
-    }
 
     public async ValueTask GoToHomePage()
     {

@@ -5,14 +5,11 @@ using BrowserInterop.Storage;
 
 using Microsoft.JSInterop;
 
-public sealed class LocalStorageSettingsService : SettingsServiceBase
+public sealed class LocalStorageSettingsService(IJSRuntime jsRuntime) : SettingsServiceBase
 {
     private const string SettingsKey = "settings";
 
-    private readonly IJSRuntime jsRuntime;
-
-    public LocalStorageSettingsService(IJSRuntime jsRuntime) =>
-        this.jsRuntime = jsRuntime ?? throw new ArgumentNullException(nameof(jsRuntime));
+    private readonly IJSRuntime jsRuntime = jsRuntime ?? throw new ArgumentNullException(nameof(jsRuntime));
 
     public override async ValueTask<GameSettings> GetSettings()
     {
@@ -32,8 +29,9 @@ public sealed class LocalStorageSettingsService : SettingsServiceBase
 
     public override async ValueTask SaveSettings(GameSettings settings)
     {
+        ArgumentNullException.ThrowIfNull(settings);
         var localStorage = await this.GetLocalStorage();
-        await localStorage.SetItem(SettingsKey, settings ?? throw new ArgumentNullException(nameof(settings)));
+        await localStorage.SetItem(SettingsKey, settings);
     }
 
     private async ValueTask<WindowStorage> GetLocalStorage()

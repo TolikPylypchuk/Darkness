@@ -1,7 +1,5 @@
 namespace Darkness.Maze;
 
-using System.Text;
-
 public static class GameMazeExtensions
 {
     public static bool IsOpen(this CellSide side) =>

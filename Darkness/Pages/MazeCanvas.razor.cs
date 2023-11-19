@@ -18,9 +18,9 @@ public partial class MazeCanvas : ComponentBase
 
     private bool IsFinished { get; set; } = false;
 
-    private HashSet<Cell> VisibleCells { get; } = new();
-    private HashSet<Cell> PartiallyVisibleCells { get; } = new();
-    private HashSet<(Cell, double)> AnimatingCells { get; } = new();
+    private HashSet<Cell> VisibleCells { get; } = [];
+    private HashSet<Cell> PartiallyVisibleCells { get; } = [];
+    private HashSet<(Cell, double)> AnimatingCells { get; } = [];
 
     private string MazeStyle { get; set; } = String.Empty;
 
