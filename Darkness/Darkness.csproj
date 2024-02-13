@@ -27,10 +27,10 @@
 
   <ItemGroup>
     <PackageReference Include="BrowserInterop" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-    <PackageReference Include="MudBlazor" Version="6.12.0" />
+    <PackageReference Include="MudBlazor" Version="6.15.0" />
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="2.1.1" />
   </ItemGroup>
 
