@@ -1,10 +1,10 @@
-namespace Darkness.Navigation;
-
 using BrowserInterop;
 using BrowserInterop.Extensions;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+
+namespace Darkness.Navigation;
 
 public class BrowserHistoryAwareNavigator(NavigationManager navigationManager, IJSRuntime jsRuntime) : INavigator
 {

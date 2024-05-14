@@ -1,6 +1,6 @@
-namespace Darkness.Pages;
-
 using Microsoft.AspNetCore.Components;
+
+namespace Darkness.Pages;
 
 public partial class MazeCanvas : ComponentBase
 {

@@ -1,9 +1,9 @@
-namespace Darkness.Settings;
-
 using BrowserInterop.Extensions;
 using BrowserInterop.Storage;
 
 using Microsoft.JSInterop;
+
+namespace Darkness.Settings;
 
 public sealed class LocalStorageSettingsService(IJSRuntime jsRuntime) : SettingsServiceBase
 {
