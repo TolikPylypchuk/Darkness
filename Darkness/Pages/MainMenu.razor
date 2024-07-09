@@ -9,12 +9,12 @@
     <MudText Align="Align.Center" Class="subtitle">A maze game where you don't actually see the entire maze</MudText>
 
     <div class="action-container">
-        <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large" Color="Color.Primary"
+        <MudButton Variant="Variant.Filled" DropShadow="false" Size="Size.Large" Color="Color.Primary"
                    @onclick="async () => await this.Navigator.GoToMazePage()">
             Play
         </MudButton>
 
-        <MudButton Variant="Variant.Filled" DisableElevation="true" Size="Size.Large"
+        <MudButton Variant="Variant.Filled" DropShadow="false" Size="Size.Large"
                    @onclick="async () => await this.Navigator.GoToSettingsPage()">
             Settings
         </MudButton>

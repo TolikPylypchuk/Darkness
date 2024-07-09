@@ -22,22 +22,22 @@
                 <MudSelectItem T="int" Value="size" />
             }
         </MudSelect>
-        <MudCheckBox T="bool" Label="Always show the finish tile" @bind-Checked="this.AlwaysShowFinish"
+        <MudCheckBox T="bool" Label="Always show the finish tile" @bind-Value="this.AlwaysShowFinish"
                      Class="show-finish-checkbox" />
     </MudForm>
 
     <div class="action-container">
         <div class="main-action-container">
-            <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+            <MudButton Variant="Variant.Filled" DropShadow="false" Color="Color.Primary"
                        @onclick="this.Save">
                 Save
             </MudButton>
-            <MudButton Variant="Variant.Filled" DisableElevation="true" @onclick="this.NavigateToHomePage">
+            <MudButton Variant="Variant.Filled" DropShadow="false" @onclick="this.NavigateToHomePage">
                 Cancel
             </MudButton>
         </div>
 
-        <MudButton Variant="Variant.Filled" DisableElevation="true" @onclick="this.Reset" Class="reset-button">
+        <MudButton Variant="Variant.Filled" DropShadow="false" @onclick="this.Reset" Class="reset-button">
             Reset
         </MudButton>
     </div>
