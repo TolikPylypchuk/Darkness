@@ -1,0 +1,22 @@
+{
+  "name": "Darkness",
+  "short_name": "Darkness",
+  "id": "./",
+  "start_url": "./",
+  "theme_color": "#32333d",
+  "background_color": "#32333d",
+  "display": "standalone",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+        "src": "/favicon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    },
+    {
+        "src": "/favicon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }
+  ]
+}
