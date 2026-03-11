@@ -16,22 +16,33 @@
                 <MudSelectItem T="int" Value="size" />
             }
         </MudSelect>
+
         <MudSelect T="int" Label="Maze Height" Strict="true" @bind-Value="this.MazeHeight">
             @for (int size = 10; size <= 50; size += 5)
             {
                 <MudSelectItem T="int" Value="size" />
             }
         </MudSelect>
-        <MudCheckBox T="bool" Label="Always show the finish tile" @bind-Value="this.AlwaysShowFinish"
-                     Class="show-finish-checkbox" />
+
+        <MudCheckBox
+            T="bool"
+            Label="Always show the finish tile"
+            @bind-Value="this.AlwaysShowFinish"
+            Class="show-finish-checkbox"
+        />
     </MudForm>
 
     <div class="action-container">
         <div class="main-action-container">
-            <MudButton Variant="Variant.Filled" DropShadow="false" Color="Color.Primary"
-                       @onclick="this.Save">
+            <MudButton
+                Variant="Variant.Filled"
+                DropShadow="false"
+                Color="Color.Primary"
+                @onclick="this.Save"
+            >
                 Save
             </MudButton>
+
             <MudButton Variant="Variant.Filled" DropShadow="false" @onclick="this.NavigateToHomePage">
                 Cancel
             </MudButton>

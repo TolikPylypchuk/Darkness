@@ -7,15 +7,25 @@
 <div @ref="this.PageContainer" @onkeydown="this.OnKeyDown" class="maze-page" tabindex="0">
     <nav>
         <div class="back">
-            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.ArrowBack"
-                       @onclick="async () => await this.BackToHomePage()">
+            <MudButton
+                Variant="Variant.Outlined"
+                Color="Color.Secondary"
+                StartIcon="@Icons.Material.Filled.ArrowBack"
+                @onclick="async () => await this.BackToHomePage()"
+            >
                 Go Back
             </MudButton>
         </div>
 
         <div class="back-mobile">
-            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Variant="Variant.Outlined" Color="Color.Secondary"
-                           @onclick="async () => await this.BackToHomePage()" aria-label="Back" />
+            <MudIconButton
+                Icon="@Icons.Material.Filled.ArrowBack"
+                Variant="Variant.Outlined"
+                Color="Color.Secondary"
+                @onclick="async () => await this.BackToHomePage()"
+                aria-label="Back"
+            />
+
             <MudText Typo="Typo.h5">Darkness</MudText>
         </div>
 
@@ -25,8 +35,14 @@
             @if (this.IsLoaded)
             {
                 <MudText Typo="Typo.body1" Class="timer">@this.TimerText</MudText>
-                <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Secondary" Size="Size.Large"
-                               @onclick="this.ShowInfoDialog" aria-label="Info" />
+
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.Info"
+                    Color="Color.Secondary"
+                    Size="Size.Large"
+                    @onclick="this.ShowInfoDialog"
+                    aria-label="Info"
+                />
             }
         </div>
     </nav>
